@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+    <!-- 二维码识别界面 -->
+    <com.arseeds.ar.CameraPreview
+        android:id="@+id/cp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.arseeds.ar.CameraPreview>
+
+
+    <com.arseeds.ar.view.ScanView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff5f00"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:fitsSystemWindows="true"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            >
+            <ImageView
+                android:id="@+id/mo_scanner_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:padding="6dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/scanner_back_img" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="扫描二维码"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        >
+        <TextView
+            android:id="@+id/tv_capture_crop_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="扫描包装二维码"
+            android:textColor="#b3ffffff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="(微信扫码查看视频)"
+            android:textColor="#b3ffffff"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+
+</FrameLayout>

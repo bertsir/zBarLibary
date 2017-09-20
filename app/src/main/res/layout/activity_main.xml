@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+   <Button
+       android:id="@+id/bt"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="扫描二维码"
+       />
+
+   <Button
+       android:id="@+id/bt_make"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="生成二维码"
+       android:layout_marginTop="70dp"
+       />
+
+   <ImageView
+       android:id="@+id/iv_qr"
+       android:layout_width="200dp"
+       android:layout_height="200dp"
+       android:layout_gravity="center"
+       android:background="@color/colorAccent"
+       />
+
+</FrameLayout>
