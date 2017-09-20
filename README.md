@@ -41,3 +41,6 @@ String s = QRUtils.getInstance().decodeQRcode(iv_qr);
 
 
 #### 二维码也就这些需求吧，这么简单就可以搞定了，识别速度是zxing的很多倍！方便了你的话可不可以给个Start
+
+### DEMO
+![](http://tu.bertsir.top/images/2017/09/20/zBMm.png)
