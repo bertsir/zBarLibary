@@ -10,19 +10,20 @@
 
 
     <!-- 二维码识别界面 -->
-    <com.arseeds.ar.CameraPreview
+    <cn.bertsir.zbar.CameraPreview
         android:id="@+id/cp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.arseeds.ar.CameraPreview>
+        android:layout_height="match_parent"></cn.bertsir.zbar.CameraPreview>
 
 
-    <com.arseeds.ar.view.ScanView
+    <cn.bertsir.zbar.view.ScanView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
     <FrameLayout
+        android:id="@+id/fl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ff5f00"
@@ -47,6 +48,7 @@
                 android:src="@drawable/scanner_back_img" />
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -68,25 +70,40 @@
         android:layout_marginTop="140dp"
         >
         <TextView
-            android:id="@+id/tv_capture_crop_tv"
+            android:id="@+id/tv_des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
-            android:text="扫描包装二维码"
+            android:text="扫一扫"
             android:textColor="#b3ffffff"
             android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:text="(微信扫码查看视频)"
-            android:textColor="#b3ffffff"
-            android:textSize="12sp" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_flash"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/circle_trans_black"
+        android:src="@drawable/scanner_light"
+        android:padding="5dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/iv_album"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/circle_trans_black"
+        android:src="@drawable/scanner_album"
+        android:padding="5dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        />
 
 
 </FrameLayout>
