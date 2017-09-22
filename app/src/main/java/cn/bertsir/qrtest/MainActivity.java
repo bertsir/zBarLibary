@@ -70,15 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void start(){
         QrConfig qrConfig = new QrConfig.Builder()
-                .setDesText("(识别二维码)")
-                .setShowLight(true)
-                .setShowTitle(true)
-                .setCornerColor(Color.WHITE)
-                .setLineColor(Color.WHITE)
-                .setLineSpeed(QrConfig.LINE_MEDIUM)
-                .setScanType(QrConfig.TYPE_QRCODE)
-                .setPlaySound(false)
-                .setTitleText("扫描二维码")
+                .setDesText("(识别二维码)")//扫描框下文字
+                .setShowDes(false)//是否显示扫描框下面文字
+                .setShowLight(true)//显示手电筒按钮
+                .setShowTitle(true)//显示Title
+                .setShowAlbum(true)//显示从相册选择按钮
+                .setCornerColor(Color.WHITE)//设置扫描框颜色
+                .setLineColor(Color.WHITE)//设置扫描线颜色
+                .setLineSpeed(QrConfig.LINE_MEDIUM)//设置扫描线速度
+                .setScanType(QrConfig.TYPE_QRCODE)//设置扫描框类型（二维码，条形码）
+                .setPlaySound(false)//是否扫描成功后bi~的声音
+                .setTitleText("扫描二维码")//设置Tilte文字
+                .setTitleBackgroudColor(Color.BLUE)//设置状态栏颜色
+                .setTitleTextColor(Color.BLACK)//设置Title文字颜色
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
