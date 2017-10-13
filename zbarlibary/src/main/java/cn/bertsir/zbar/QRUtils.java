@@ -79,72 +79,84 @@ public class QRUtils {
      * @param url
      * @return
      */
-    public String decodeQRcode(String url){
+    public String decodeQRcode(String url) throws Exception{
         Bitmap obmp = BitmapFactory.decodeFile(url);
-        int width = obmp.getWidth();
-        int height = obmp.getHeight();
-        int[] data = new int[width * height];
-        obmp.getPixels(data, 0, width, 0, 0, width, height);
-        RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-        QRCodeReader reader = new QRCodeReader();
-        Result re = null;
-        try {
-            re = reader.decode(bitmap1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (re == null) {
+        if(obmp != null){
+            int width = obmp.getWidth();
+            int height = obmp.getHeight();
+            int[] data = new int[width * height];
+            obmp.getPixels(data, 0, width, 0, 0, width, height);
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
+            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+            QRCodeReader reader = new QRCodeReader();
+            Result re = null;
+            try {
+                re = reader.decode(bitmap1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (re == null) {
+                return "";
+            } else {
+                return re.getText();
+            }
+        }else {
             return "";
-        } else {
-            return re.getText();
         }
+
     }
 
 
 
-    public String decodeQRcode(ImageView iv){
+    public String decodeQRcode(ImageView iv) throws Exception{
         Bitmap obmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
-        int width = obmp.getWidth();
-        int height = obmp.getHeight();
-        int[] data = new int[width * height];
-        obmp.getPixels(data, 0, width, 0, 0, width, height);
-        RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-        QRCodeReader reader = new QRCodeReader();
-        Result re = null;
-        try {
-            re = reader.decode(bitmap1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (re == null) {
-            return "";
-        } else {
-            return re.getText();
-        }
+            int width = obmp.getWidth();
+            int height = obmp.getHeight();
+            int[] data = new int[width * height];
+            obmp.getPixels(data, 0, width, 0, 0, width, height);
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
+            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+            QRCodeReader reader = new QRCodeReader();
+            Result re = null;
+            try {
+                re = reader.decode(bitmap1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (re == null) {
+                return "";
+            } else {
+                return re.getText();
+            }
+
+
     }
 
-    public String decodeQRcode(Bitmap bm){
+    public String decodeQRcode(Bitmap bm) throws Exception{
         Bitmap obmp = bm;
-        int width = obmp.getWidth();
-        int height = obmp.getHeight();
-        int[] data = new int[width * height];
-        obmp.getPixels(data, 0, width, 0, 0, width, height);
-        RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-        QRCodeReader reader = new QRCodeReader();
-        Result re = null;
-        try {
-            re = reader.decode(bitmap1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (re == null) {
+        if(bm != null){
+            int width = obmp.getWidth();
+            int height = obmp.getHeight();
+            int[] data = new int[width * height];
+            obmp.getPixels(data, 0, width, 0, 0, width, height);
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
+            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+            QRCodeReader reader = new QRCodeReader();
+            Result re = null;
+            try {
+                re = reader.decode(bitmap1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (re == null) {
+                return "";
+            } else {
+                return re.getText();
+            }
+        }else {
             return "";
-        } else {
-            return re.getText();
         }
+
     }
 
     /**

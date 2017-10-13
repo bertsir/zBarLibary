@@ -192,7 +192,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                             });
 
                         }
-                    } catch (FileNotFoundException e) {
+                    } catch (Exception e) {
                         Log.e("Exception", e.getMessage(), e);
                     }
                 }

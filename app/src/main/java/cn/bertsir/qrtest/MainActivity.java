@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,7 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_qr.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                String s = QRUtils.getInstance().decodeQRcode(iv_qr);
+                String s = null;
+                try {
+                    s = QRUtils.getInstance().decodeQRcode(iv_qr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "onLongClickException: "+e.toString() );
+                }
                 Toast.makeText(getApplicationContext(), "内容：" + s, Toast.LENGTH_SHORT).show();
                 return true;
             }
