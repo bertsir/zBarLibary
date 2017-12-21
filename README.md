@@ -3,8 +3,8 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 
 ## 预览
-![](http://tu.bertsir.top/images/2017/09/20/scan.gif)
-![](http://tu.bertsir.top/images/2017/09/20/create.gif)
+![](http://upload-images.jianshu.io/upload_images/3029020-b0044075b21b2f7c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
+![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
 
 
 ### 更新日志：
