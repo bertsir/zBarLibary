@@ -23,8 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-
 import cn.bertsir.zbar.view.ScanView;
 
 public class QRActivity extends Activity implements View.OnClickListener {
@@ -81,7 +79,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv.startScan();
 
         mo_scanner_back = (ImageView) findViewById(R.id.mo_scanner_back);
-
+        mo_scanner_back.setOnClickListener(this);
 
         iv_flash = (ImageView) findViewById(R.id.iv_flash);
         iv_flash.setOnClickListener(this);
@@ -158,6 +156,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
             if (cp != null) {
                 cp.setFlash();
             }
+        }else if(v.getId() == R.id.mo_scanner_back){
+            finish();
         }
     }
 
