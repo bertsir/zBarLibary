@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.view.ScanView;
 
 public class QRActivity extends Activity implements View.OnClickListener {
@@ -77,7 +78,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv = (ScanView) findViewById(R.id.sv);
         sv.setType(options.getScan_type());
         sv.startScan();
-
         mo_scanner_back = (ImageView) findViewById(R.id.mo_scanner_back);
         mo_scanner_back.setOnClickListener(this);
 
@@ -106,6 +106,11 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv.setLineSpeed(options.getLine_speed());
         sv.setLineColor(options.getLINE_COLOR());
 
+        if(options.getScan_type() == QrConfig.TYPE_QRCODE){
+            Symbol.scanType = Symbol.QRCODE;
+        }else {
+            Symbol.scanType = Symbol.NONE;
+        }
 
     }
 

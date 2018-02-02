@@ -46,8 +46,14 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
     CameraScanAnalysis() {
         mImageScanner = new ImageScanner();
-        mImageScanner.setConfig(0, Config.X_DENSITY, 3);
-        mImageScanner.setConfig(0, Config.Y_DENSITY, 3);
+
+        if (Symbol.scanType == Symbol.QRCODE) {
+            mImageScanner.setConfig(0, Config.ENABLE, 0);
+            mImageScanner.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
+        } else {
+            mImageScanner.setConfig(64, Config.X_DENSITY, 3);
+            mImageScanner.setConfig(64, Config.Y_DENSITY, 3);
+        }
 
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -78,7 +84,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
             barcode = new Image(size.width, size.height, "Y800");
             barcode.setData(data);
-            // barcode.setCrop(startX, startY, width, height);
+            // barcode.setCrop(Symbol.cropX, Symbol.cropY, Symbol.cropWidth, Symbol.cropHeight);
 
             executorService.execute(mAnalysisTask);
         }

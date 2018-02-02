@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -13,8 +14,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
+import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.R;
-
 
 
 /**
@@ -83,6 +84,7 @@ public class ScanView extends FrameLayout {
 
     public void startScan(){
         iv_scan_line.startAnimation(animation);
+        getViewWidthHeight();
     }
 
     public void onPause(){
@@ -130,5 +132,39 @@ public class ScanView extends FrameLayout {
     public int dip2px(int dp) {
         float density = getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5);
+    }
+
+    public void getViewWidthHeight(){
+        fl_scan.post(new Runnable() {
+            @Override
+            public void run() {
+                Symbol.cropWidth = fl_scan.getWidth();
+                Symbol.cropHeight = fl_scan.getHeight();
+                int screenWidth = getScreenWidth();
+                int screenHeight = getScreenHeight();
+                if(screenHeight > screenWidth){
+                    Symbol.cropX = screenWidth/2-Symbol.cropWidth/2;
+                    Symbol.cropY = screenHeight/2-Symbol.cropHeight/2;
+                }else {
+                    Symbol.cropY = screenWidth/2-Symbol.cropWidth/2;
+                    Symbol.cropX= screenHeight/2-Symbol.cropHeight/2;
+                }
+            }
+        });
+    }
+
+    public int getScreenWidth() {
+        WindowManager wm = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+
+        int width = wm.getDefaultDisplay().getWidth();
+        return width;
+    }
+
+    public int getScreenHeight() {
+        WindowManager wm = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        int height = wm.getDefaultDisplay().getHeight();
+        return height;
     }
 }
