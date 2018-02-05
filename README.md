@@ -33,6 +33,15 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 6.新增了一大波看官们可以配置的功能</br>
 
 
+### 引入：
+#### 方式一（需要修改布局的）：
+GitHub下载库，使用File -> new -> Import Module方式
+
+#### 方式二（不需要修改布局）：
+<pre>
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.3'
+</pre>
+
 
 
 ### 使用方法
