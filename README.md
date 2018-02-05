@@ -84,7 +84,7 @@ Bitmap qrCode = QRUtils.getInstance().createQRCode("www.qq.com");
 String s = QRUtils.getInstance().decodeQRcode(iv_qr);
 </pre>
 
-
+## 4.参数描述
 | name | format | description |
 | ------------- |:-------------:| :-------------:|
 | setDesText | String | 设置扫描框下方描述文字 |
