@@ -85,6 +85,23 @@ String s = QRUtils.getInstance().decodeQRcode(iv_qr);
 </pre>
 
 
+| name | format | description |
+| ------------- |:-------------:| :-------------:|
+| setDesText | String | 设置扫描框下方描述文字 |
+| setShowDes | Boolean | 设置是否显示扫描框下方描述文字 |
+| setShowLight | Boolean | 是否开启手电筒功能 |
+| setShowAlbum | Boolean | 是否开启从相册选择功能 |
+| setShowTitle | Boolean | 是否显示Title |
+| setTitleText | String | 设置Title文字 |
+| setTitleBackgroudColor | int | 设置Title背景色 |
+| setTitleTextColor | int | 设置Title文字颜色 |
+| setCornerColor | int | 设置扫描框颜色 |
+| setLineColor | int | 设置扫描线颜色 |
+| setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速<br>QrConfig.LINE_SLOW(慢速) |
+| setScanType | int | 设置扫描类型</br>QrConfig.TYPE_QRCODE(二维码)</br>QrConfig.TYPE_BARCODE(条形码) |
+| setPlaySound | Boolean | 设置扫描成功后是否有提示音 |
+
+
 
 #### 二维码也就这些需求吧，这么简单就可以搞定了，识别速度是zxing的很多倍！方便了你的话可不可以给个Start，如遇BUG请Issues
 
