@@ -5,14 +5,17 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ## 预览
 ![](http://upload-images.jianshu.io/upload_images/3029020-b0044075b21b2f7c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
 ![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
+![newVersion.jpg](http://upload-images.jianshu.io/upload_images/3029020-c62cf474fe16df3c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
 
 
 ### 更新日志：
 
-#### 计划功能
-1.支持自选扫码框类型</br>
-2.支持自选扫码类型</br>
-3.支持自定义Bi~声音
+#### 2018-02-06
+1.修复不能隐藏扫描框下方描述的BUG</br>
+2.新增只识别扫描框中的内容</br>
+3.新增自定义扫码类型</br>
+4.新增自定义扫描框类型</br>
+5.新增自定义提示音</br>
 
 
 #### 2018-02-02
@@ -39,7 +42,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 
 #### 方式二（不需要修改布局）：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.3'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.5'
 </pre>
 
 
@@ -47,7 +50,8 @@ compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.3'
 ### 使用方法
 ## 1.识别二维码（条形码）
 <pre>
-QrConfig qrConfig = new QrConfig.Builder()
+
+        QrConfig qrConfig = new QrConfig.Builder()
                 .setDesText("(识别二维码)")//扫描框下文字
                 .setShowDes(false)//是否显示扫描框下面文字
                 .setShowLight(true)//显示手电筒按钮
@@ -56,8 +60,12 @@ QrConfig qrConfig = new QrConfig.Builder()
                 .setCornerColor(Color.WHITE)//设置扫描框颜色
                 .setLineColor(Color.WHITE)//设置扫描线颜色
                 .setLineSpeed(QrConfig.LINE_MEDIUM)//设置扫描线速度
-                .setScanType(QrConfig.TYPE_QRCODE)//设置扫描框类型（二维码，条形码）
-                .setPlaySound(false)//是否扫描成功后bi~的声音
+                .setScanType(QrConfig.TYPE_QRCODE)//设置扫码类型（二维码，条形码，全部，自定义，默认为二维码）
+                .setScanViewType(QrConfig.SCANVIEW_TYPE_QRCODE)//设置扫描框类型（二维码还是条形码，默认为二维码）
+                .setCustombarcodeformat(QrConfig.BARCODE_I25)//此项只有在扫码类型为TYPE_CUSTOM时才有效
+                .setPlaySound(true)//是否扫描成功后bi~的声音
+                .setDingPath(R.raw.test)//设置提示音(不设置为默认的Ding~)
+                .setIsOnlyCenter(true)//是否只识别框中内容(默认为全屏识别)
                 .setTitleText("扫描二维码")//设置Tilte文字
                 .setTitleBackgroudColor(Color.BLUE)//设置状态栏颜色
                 .setTitleTextColor(Color.BLACK)//设置Title文字颜色
@@ -77,6 +85,7 @@ OK,就这么简单！
 <pre>
 Bitmap qrCode = QRUtils.getInstance().createQRCode("www.qq.com");
 </pre>
+*注：生成二维码暂不支持中文内容
 
 ## 3.识别本地二维码
 <pre>
@@ -98,12 +107,21 @@ String s = QRUtils.getInstance().decodeQRcode(iv_qr);
 | setCornerColor | int | 设置扫描框颜色 |
 | setLineColor | int | 设置扫描线颜色 |
 | setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速<br>QrConfig.LINE_SLOW(慢速) |
-| setScanType | int | 设置扫描类型</br>QrConfig.TYPE_QRCODE(二维码)</br>QrConfig.TYPE_BARCODE(条形码) |
+| setScanType | int | 设置扫描类型</br>QrConfig.TYPE_QRCODE(二维码)</br>QrConfig.TYPE_BARCODE(条形码)</br>QrConfig.TYPE_ALL(全部类型)</br>QrConfig.TYPE_CUSTOM(指定类型) |
+| setScanViewType | int | 设置扫描框类型</br>QrConfig.SCANVIEW_TYPE_QRCODE(二维码)</br>QrConfig.SCANVIEW_TYPE_BARCODE(条形码) |
+| setCustombarcodeformat| int| 设置指定扫码类型（举例：QrConfig.BARCODE_EAN13）,此项只有在ScanType设置为自定义时才生效 |
+| setIsOnlyCenter| Boolean | 设置是否只识别扫描框中的内容（默认为全屏扫描） |
 | setPlaySound | Boolean | 设置扫描成功后是否有提示音 |
-
+| setDingPath | int| 自定义提示音（举例：R.raw.test，不设置为默认的) |
 
 
 #### 二维码也就这些需求吧，这么简单就可以搞定了，识别速度是zxing的很多倍！方便了你的话可不可以给个Start，如遇BUG请Issues
 
+
 ### DEMO
 ![](https://www.pgyer.com/app/qrcode/CyKm)
+
+### 快过年了，帮助到大佬们了，就打赏点呗
+![微信图片_20180206164447.jpg](http://upload-images.jianshu.io/upload_images/3029020-8066ee3c42334a86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160)
+
+![微信图片_20180206164453.jpg](http://upload-images.jianshu.io/upload_images/3029020-5d220c5715c59947.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160)
