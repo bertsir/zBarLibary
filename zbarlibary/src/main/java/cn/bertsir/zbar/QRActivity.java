@@ -52,6 +52,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
 
+        Symbol.scanType = options.getScan_type();
+        Symbol.scanFormat = options.getCustombarcodeformat();
+        Symbol.is_only_scan_center = options.isOnly_center();
 
         setContentView(R.layout.activity_qr);
         initView();
@@ -70,19 +73,20 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
         cp = (CameraPreview) findViewById(R.id.cp);
-
         //bi~
         soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
-        soundPool.load(this, R.raw.qrcode, 1);
+        soundPool.load(this, options.getDing_path(), 1);
 
         sv = (ScanView) findViewById(R.id.sv);
-        sv.setType(options.getScan_type());
+        sv.setType(options.getScan_view_type());
         sv.startScan();
+
         mo_scanner_back = (ImageView) findViewById(R.id.mo_scanner_back);
         mo_scanner_back.setOnClickListener(this);
 
         iv_flash = (ImageView) findViewById(R.id.iv_flash);
         iv_flash.setOnClickListener(this);
+
         iv_album = (ImageView) findViewById(R.id.iv_album);
         iv_album.setOnClickListener(this);
 
@@ -90,27 +94,20 @@ public class QRActivity extends Activity implements View.OnClickListener {
         fl_title = (FrameLayout) findViewById(R.id.fl_title);
         tv_des = (TextView) findViewById(R.id.tv_des);
 
-
-
         iv_album.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
         fl_title.setVisibility(options.isShow_title() ? View.VISIBLE : View.GONE);
         iv_flash.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
         iv_album.setVisibility(options.isShow_album() ? View.VISIBLE :View.GONE);
+        tv_des.setVisibility(options.isShow_des() ? View.VISIBLE :View.GONE);
+
         tv_des.setText(options.getDes_text());
         tv_title.setText(options.getTitle_text());
         fl_title.setBackgroundColor(options.getTITLE_BACKGROUND_COLOR());
         tv_title.setTextColor(options.getTITLE_TEXT_COLOR());
 
-
         sv.setCornerColor(options.getCORNER_COLOR());
         sv.setLineSpeed(options.getLine_speed());
         sv.setLineColor(options.getLINE_COLOR());
-
-        if(options.getScan_type() == QrConfig.TYPE_QRCODE){
-            Symbol.scanType = Symbol.QRCODE;
-        }else {
-            Symbol.scanType = Symbol.NONE;
-        }
 
     }
 
@@ -138,7 +135,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
         if (cp != null) {
             cp.stop();
         }
-
         sv.onPause();
     }
 

@@ -40,19 +40,34 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
     private ImageScanner mImageScanner;
     private Handler mHandler;
     private ScanCallback mCallback;
+    private static final String TAG = "CameraScanAnalysis";
 
     private boolean allowAnalysis = true;
     private Image barcode;
 
     CameraScanAnalysis() {
         mImageScanner = new ImageScanner();
-
-        if (Symbol.scanType == Symbol.QRCODE) {
-            mImageScanner.setConfig(0, Config.ENABLE, 0);
+        if (Symbol.scanType == QrConfig.TYPE_QRCODE) {
+            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
             mImageScanner.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
-        } else {
-            mImageScanner.setConfig(64, Config.X_DENSITY, 3);
-            mImageScanner.setConfig(64, Config.Y_DENSITY, 3);
+        } else if(Symbol.scanType == QrConfig.TYPE_BARCODE){
+            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+            mImageScanner.setConfig(Symbol.CODE128, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.CODE39, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.EAN13, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.EAN8, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.UPCA, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+            mImageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+        }else if(Symbol.scanType == QrConfig.TYPE_ALL){
+            mImageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
+            mImageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
+        }else if(Symbol.scanType == QrConfig.TYPE_CUSTOM){
+            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+            mImageScanner.setConfig(Symbol.scanFormat, Config.ENABLE, 1);
+        }else {
+            mImageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
+            mImageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
         }
 
         mHandler = new Handler(Looper.getMainLooper()) {
@@ -81,10 +96,18 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
             allowAnalysis = false;
 
             Camera.Size size = camera.getParameters().getPreviewSize();
-
             barcode = new Image(size.width, size.height, "Y800");
             barcode.setData(data);
-            // barcode.setCrop(Symbol.cropX, Symbol.cropY, Symbol.cropWidth, Symbol.cropHeight);
+
+            if(Symbol.is_only_scan_center){
+                int cropWidth = (int) (Symbol.cropWidth* (size.height /(float)Symbol.screenWidth));
+                int cropHeight = (int) (Symbol.cropHeight* (size.width /(float)Symbol.screenHeight));
+
+                Symbol.cropX = size.width/2 - cropHeight/2;
+                Symbol.cropY = size.height/2 - cropWidth/2;
+
+                barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
+            }
 
             executorService.execute(mAnalysisTask);
         }

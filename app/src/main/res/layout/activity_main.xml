@@ -1,35 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     >
 
-   <Button
-       android:id="@+id/bt"
+   <ScrollView
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="扫描二维码"
-       />
+       android:layout_height="match_parent"
+       android:scrollbars="none"
+       >
 
-   <Button
-       android:id="@+id/bt_make"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="生成二维码"
-       android:layout_marginTop="70dp"
-       />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          >
+         <ImageView
+             android:id="@+id/iv_qr"
+             android:layout_width="200dp"
+             android:layout_height="200dp"
+             android:layout_gravity="center"
+             android:background="@color/colorAccent"
+             android:layout_marginTop="10dp"
+             />
 
-   <ImageView
-       android:id="@+id/iv_qr"
-       android:layout_width="200dp"
-       android:layout_height="200dp"
-       android:layout_gravity="center"
-       android:background="@color/colorAccent"
-       />
+         <EditText
+             android:id="@+id/et_qr_content"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="BertSir"
+             />
+
+         <EditText
+             android:id="@+id/et_qr_title"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="扫描二维码"
+             />
+         <EditText
+             android:id="@+id/et_qr_des"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="(识别二维码)"
+             />
+         <CheckBox
+             android:id="@+id/cb_show_title"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否显示Title"
+             android:checked="true"
+             />
+         <CheckBox
+             android:id="@+id/cd_show_des"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否显示底部描述"
+             android:checked="true"
+             />
+
+         <CheckBox
+             android:id="@+id/cb_show_ding"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否有提示音"
+             android:checked="true"
+             />
+         <CheckBox
+             android:id="@+id/cb_show_custom_ding"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否自定义提示音"
+             android:checked="true"
+             />
+         <CheckBox
+             android:id="@+id/cb_show_flash"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否显示手电筒"
+             android:checked="true"
+             />
+         <CheckBox
+             android:id="@+id/cb_show_album"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否从相册选择"
+             android:checked="true"
+             />
+         <CheckBox
+             android:id="@+id/cb_only_center"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="是否只扫描框中内容"
+             android:checked="true"
+             />
+         <RadioGroup
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             >
+            <RadioButton
+                android:id="@+id/rb_qrcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="二维码"
+                />
+            <RadioButton
+                android:id="@+id/rb_bcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="条形码"
+                />
+            <RadioButton
+                android:id="@+id/rb_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部"
+                />
+
+         </RadioGroup>
+         <Button
+             android:id="@+id/bt_scan"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="扫描"
+             />
+
+         <Button
+             android:id="@+id/bt_make"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="生成"
+             />
+      </LinearLayout>
+   </ScrollView>
 
 
 
-</FrameLayout>
+
+</LinearLayout>

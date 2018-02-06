@@ -27,9 +27,11 @@ public class QrConfig implements Serializable {
     public boolean show_album = true;
     public boolean show_des = true;
 
-    public boolean isPlay_sound() {
-        return play_sound;
-    }
+
+
+    public boolean only_center = false;
+
+
 
     public boolean play_sound = true;
 
@@ -39,8 +41,84 @@ public class QrConfig implements Serializable {
     public int line_speed = LINE_FAST;
     public int corner_width = 10;
 
-    public static final int TYPE_QRCODE = 1;
-    public  static final int TYPE_BARCODE = 2;
+
+    public static  int ding_path = R.raw.qrcode;//默认声音
+
+    public int custombarcodeformat = -1;
+
+    public static final int TYPE_QRCODE = 1;//扫描二维码
+    public  static final int TYPE_BARCODE = 2;//扫描条形码（UPCA）
+    public  static final int TYPE_ALL = 3;//扫描全部类型码
+    public  static final int TYPE_CUSTOM = 4;//扫描用户定义类型码
+
+    public static final int SCANVIEW_TYPE_QRCODE = 1;//二维码框
+    public static final int SCANVIEW_TYPE_BARCODE = 2;//条形码框
+
+
+
+
+    public int scan_type = TYPE_QRCODE;//默认只扫描二维码
+    public int scan_view_type = SCANVIEW_TYPE_QRCODE;//默认为二维码扫描框
+    public final static int REQUEST_CAMERA = 99;
+    public final static String EXTRA_THIS_CONFIG = "extra_this_config";
+
+    /**
+     * EAN-8.
+     */
+    public static final int BARCODE_EAN8 = 8;
+    /**
+     * UPC-E.
+     */
+    public static final int BARCODE_UPCE = 9;
+    /**
+     * ISBN-10 (from EAN-13).
+     */
+    public static final int BARCODE_ISBN10 = 10;
+    /**
+     * UPC-A.
+     */
+    public static final int BARCODE_UPCA = 12;
+    /**
+     * EAN-13.
+     */
+    public static final int BARCODE_EAN13 = 13;
+    /**
+     * ISBN-13 (from EAN-13).
+     */
+    public static final int BARCODE_ISBN13 = 14;
+    /**
+     * Interleaved 2 of 5.
+     */
+    public static final int BARCODE_I25 = 25;
+    /**
+     * DataBar (RSS-14).
+     */
+    public static final int BARCODE_DATABAR = 34;
+    /**
+     * DataBar Expanded.
+     */
+    public static final int BARCODE_DATABAR_EXP = 35;
+    /**
+     * Codabar.
+     */
+    public static final int BARCODE_CODABAR = 38;
+    /**
+     * Code 39.
+     */
+    public static final int BARCODE_CODE39 = 39;
+    /**
+     * PDF417.
+     */
+    public static final int BARCODE_PDF417 = 57;
+
+    /**
+     * Code 93.
+     */
+    public static final int BARCODE_CODE93 = 93;
+    /**
+     * Code 128.
+     */
+    public static final int BARCODE_CODE128 = 128;
 
 
 
@@ -48,12 +126,9 @@ public class QrConfig implements Serializable {
         return scan_type;
     }
 
-    public int scan_type = TYPE_QRCODE;
-
-
-
-    public final static int REQUEST_CAMERA = 99;
-    public final static String EXTRA_THIS_CONFIG = "extra_this_config";
+    public boolean isPlay_sound() {
+        return play_sound;
+    }
 
     public int getCORNER_COLOR() {
         return CORNER_COLOR;
@@ -102,6 +177,23 @@ public class QrConfig implements Serializable {
     public int getCorner_width() {
         return corner_width;
     }
+
+    public int getCustombarcodeformat() {
+        return custombarcodeformat;
+    }
+
+    public int getScan_view_type() {
+        return scan_view_type;
+    }
+
+    public boolean isOnly_center() {
+        return only_center;
+    }
+
+    public static int getDing_path() {
+        return ding_path;
+    }
+
 
 
     public static class Builder{
@@ -179,12 +271,29 @@ public class QrConfig implements Serializable {
             return this;
         }
 
+        public Builder setCustombarcodeformat(int format){
+            watcher.custombarcodeformat = format;
+            return this;
+        }
+
+        public Builder setScanViewType(int type){
+            watcher.scan_view_type = type;
+            return this;
+        }
+
+        public Builder setIsOnlyCenter(boolean isOnlyCenter){
+            watcher.only_center = isOnlyCenter;
+            return this;
+        }
+
+        public Builder setDingPath(int ding){
+            watcher.ding_path = ding;
+            return this;
+        }
+
         public QrConfig create(){
             return watcher;
         }
     }
-
-
-
 
 }

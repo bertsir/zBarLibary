@@ -122,9 +122,30 @@ public class Symbol {
     public static int cropHeight = 0;
 
     /**
+     * 屏幕的宽
+     */
+    public static int screenWidth = 0;
+
+    /**
+     * 屏幕的高
+     */
+    public static int screenHeight = 0;
+
+
+    /**
      * 识别类型
      */
-    public static int scanType = 0;
+    public static int scanType = 0;//1二维码 2UPCA条形码 3全部类型 4用户指定类型
+
+    /**
+     * 识别码类
+     */
+    public static int scanFormat = 0;
+
+    /**
+     * 是否只识别框中内容
+     */
+    public static boolean is_only_scan_center = false;
 
 
     /**

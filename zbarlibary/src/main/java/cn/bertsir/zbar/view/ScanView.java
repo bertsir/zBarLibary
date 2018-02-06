@@ -5,6 +5,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import cn.bertsir.zbar.Qr.Symbol;
+import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.R;
 
 
@@ -27,8 +29,6 @@ public class ScanView extends FrameLayout {
     private LineView iv_scan_line;
     private TranslateAnimation animation;
     private FrameLayout fl_scan;
-    public  int TYPE_QRCODE = 1;
-    public  int TYPE_BARCODE = 2;
     private int CURRENT_TYEP = 1;
     private CornerView cnv_left_top;
     private CornerView cnv_left_bottom;
@@ -103,10 +103,10 @@ public class ScanView extends FrameLayout {
     public void setType(int type){
         CURRENT_TYEP = type;
         LinearLayout.LayoutParams fl_params = (LinearLayout.LayoutParams) fl_scan.getLayoutParams();
-        if(CURRENT_TYEP == TYPE_QRCODE){
+        if(CURRENT_TYEP == QrConfig.SCANVIEW_TYPE_QRCODE){
             fl_params.width = dip2px(200);
             fl_params.height = dip2px(200);
-        }else if(CURRENT_TYEP == TYPE_BARCODE){
+        }else if(CURRENT_TYEP == QrConfig.SCANVIEW_TYPE_BARCODE){
             fl_params.width = dip2px(300);
             fl_params.height = dip2px(100);
         }
@@ -140,15 +140,9 @@ public class ScanView extends FrameLayout {
             public void run() {
                 Symbol.cropWidth = fl_scan.getWidth();
                 Symbol.cropHeight = fl_scan.getHeight();
-                int screenWidth = getScreenWidth();
-                int screenHeight = getScreenHeight();
-                if(screenHeight > screenWidth){
-                    Symbol.cropX = screenWidth/2-Symbol.cropWidth/2;
-                    Symbol.cropY = screenHeight/2-Symbol.cropHeight/2;
-                }else {
-                    Symbol.cropY = screenWidth/2-Symbol.cropWidth/2;
-                    Symbol.cropX= screenHeight/2-Symbol.cropHeight/2;
-                }
+                Symbol.screenWidth = getScreenWidth();
+                Symbol.screenHeight = getScreenHeight();
+
             }
         });
     }
