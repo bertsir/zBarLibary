@@ -122,7 +122,7 @@ String s = QRUtils.getInstance().decodeQRcode(iv_qr);
 ![](https://www.pgyer.com/app/qrcode/CyKm)
 
 ### 快过年了，帮助到大佬们了，就打赏点呗
-<figure class="half">
-    <img src="http://upload-images.jianshu.io/upload_images/3029020-8066ee3c42334a86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160">
-    <img src="http://upload-images.jianshu.io/upload_images/3029020-5d220c5715c59947.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160">
-</figure>
+
+<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://upload-images.jianshu.io/upload_images/3029020-8066ee3c42334a86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160" ></div>
+
+<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://upload-images.jianshu.io/upload_images/3029020-5d220c5715c59947.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/160" ></div>
