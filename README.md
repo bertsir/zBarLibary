@@ -13,6 +13,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ### 计划功能
 1.加入内部权限处理
 
+### 2018-02-07
+1.修复打开手电筒扫码成功无结果也不返回的问题
+
 ### 2018-02-06
 1.修复不能隐藏扫描框下方描述的BUG</br>
 2.新增只识别扫描框中的内容</br>
@@ -44,7 +47,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 
 #### 方式二（不需要修改布局）：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.5'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.6'
 </pre>
 
 

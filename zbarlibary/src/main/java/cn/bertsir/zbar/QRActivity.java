@@ -117,6 +117,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
             if(options.isPlay_sound()){
                 soundPool.play(1, 1, 1, 0, 0, 1);
             }
+            if (cp != null) {
+                cp.setFlash(false);
+            }
             QrManager.getInstance().getResultCallback().onScanSuccess(result);
             finish();
         }
@@ -125,7 +128,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        cp.stop();
+        if (cp != null) {
+            cp.setFlash(false);
+            cp.stop();
+        }
         soundPool.release();
     }
 

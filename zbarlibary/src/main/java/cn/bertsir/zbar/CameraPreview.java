@@ -137,4 +137,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public void setFlash(){
         mCameraManager.setFlash();
     }
+    public void setFlash(boolean open){
+        mCameraManager.setFlash(open);
+    }
 }
