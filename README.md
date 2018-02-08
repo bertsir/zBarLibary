@@ -52,7 +52,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 
 #### 方式二（不需要修改布局）：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.6'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.0.7'
 </pre>
 
 
