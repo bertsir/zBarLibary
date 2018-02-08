@@ -22,6 +22,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 /**
  * <p>QRCode Camera preview, include QRCode recognition.</p>
@@ -63,6 +64,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         try {
             mCameraManager.openDriver();
         } catch (Exception e) {
+            Toast.makeText(getContext(),"摄像头权限被拒绝！",Toast.LENGTH_SHORT).show();
             return false;
         }
         mPreviewCallback.onStart();
@@ -96,6 +98,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
             mCameraManager.autoFocus(mFocusCallback);
         } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
 

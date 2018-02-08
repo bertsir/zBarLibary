@@ -46,12 +46,22 @@ public class QRUtils {
      * @return
      */
     public Bitmap createQRCode(String content){
+        return createQRCode(content,300,300);
+    }
+
+    /**
+     * 生成二维码
+     * @param content
+     * @return
+     */
+    public Bitmap createQRCode(String content,int width,int height){
         Bitmap bitmap = null;
         BitMatrix result = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            result = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, 300, 300);
-
+            result = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, width, height);
+            result = multiFormatWriter.encode(new String(content.getBytes("UTF-8"),"ISO-8859-1"), BarcodeFormat
+                    .QR_CODE, width, height);
             int w = result.getWidth();
             int h = result.getHeight();
             int[] pixels = new int[w * h];
@@ -65,9 +75,7 @@ public class QRUtils {
             bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
 
 
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return bitmap;
