@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setShowLight(cb_show_flash.isChecked())//显示手电筒按钮
                 .setShowTitle(cb_show_title.isChecked())//显示Title
                 .setShowAlbum(cb_show_album.isChecked())//显示从相册选择按钮
-                .setCornerColor(Color.WHITE)//设置扫描框颜色
-                .setLineColor(Color.WHITE)//设置扫描线颜色
+                .setCornerColor(Color.parseColor("#E42E30"))//设置扫描框颜色
+                .setLineColor(Color.parseColor("#E42E30"))//设置扫描线颜色
                 .setLineSpeed(QrConfig.LINE_MEDIUM)//设置扫描线速度
                 .setScanType(scan_type)//设置扫码类型（二维码，条形码，全部，自定义，默认为二维码）
                 .setScanViewType(scan_view_type)//设置扫描框类型（二维码还是条形码，默认为二维码）
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setDingPath(cb_show_custom_ding.isChecked() ? R.raw.test: R.raw.qrcode)//设置提示音(不设置为默认的Ding~)
                 .setIsOnlyCenter(cb_only_center.isChecked())//是否只识别框中内容(默认为全屏识别)
                 .setTitleText(et_qr_title.getText().toString())//设置Tilte文字
-                .setTitleBackgroudColor(Color.BLUE)//设置状态栏颜色
-                .setTitleTextColor(Color.BLACK)//设置Title文字颜色
+                .setTitleBackgroudColor(Color.parseColor("#262020"))//设置状态栏颜色
+                .setTitleTextColor(Color.WHITE)//设置Title文字颜色
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override

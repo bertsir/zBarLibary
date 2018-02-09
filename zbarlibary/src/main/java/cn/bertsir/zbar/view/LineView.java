@@ -49,9 +49,13 @@ public class LineView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mShader = new LinearGradient(0,0,getMeasuredWidth(),0,new int[] {Color.TRANSPARENT,line_color, Color.TRANSPARENT},null,
-                Shader.TileMode.REPEAT);
+        String line_colors = String.valueOf(Integer.toHexString(line_color));
+        line_colors = line_colors.substring(line_colors.length() - 6, line_colors.length() - 0);
+        mShader = new LinearGradient(0,0,getMeasuredWidth(),0,new int[] {Color.parseColor("#00"+line_colors),line_color, Color.parseColor("#00"+line_colors),},null,
+                Shader.TileMode.CLAMP);
         paint.setShader(mShader);
         canvas.drawLine(0, 0, width, 0, paint);
     }
+
+
 }
