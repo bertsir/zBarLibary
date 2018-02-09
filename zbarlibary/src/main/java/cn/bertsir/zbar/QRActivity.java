@@ -180,31 +180,27 @@ public class QRActivity extends Activity implements View.OnClickListener {
                 public void run() {
                     try {
                         Bitmap Qrbitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                        String qrcontent = QRUtils.getInstance().decodeQRcode(Qrbitmap);
+                        final String qrcontent = QRUtils.getInstance().decodeQRcode(Qrbitmap);
                         Qrbitmap.recycle();
                         Qrbitmap = null;
-                        System.gc();
-                        if (!TextUtils.isEmpty(qrcontent)) {
-                            Intent videoPath = new Intent().putExtra("QRcontent", qrcontent);
-                            setResult(RESULT_OK, videoPath);
-                            finish();
-                            closeProgressDialog();
-                        } else {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                    closeProgressDialog();
+                                    if(!TextUtils.isEmpty(qrcontent)){
+                                        closeProgressDialog();
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                        finish();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                        closeProgressDialog();
+                                    }
                                 }
                             });
-
-                        }
                     } catch (Exception e) {
                         Log.e("Exception", e.getMessage(), e);
                     }
                 }
             }).start();
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
