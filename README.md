@@ -54,9 +54,15 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 GitHub下载库，使用File -> new -> Import Module方式
 
 #### 方式二（不需要修改布局）：
+最新版本（推荐）：
+<pre>
+ compile 'cn.bertsir.zbarLibary:zbarlibary:latest.release'
+</pre>
+指定版本：
 <pre>
 compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.0'
 </pre>
+
 
 
 #### 关于包的大小问题
