@@ -73,12 +73,12 @@ public class SymbolSet
     /**
      * Retrieve an iterator over the Symbol elements in this collection.
      */
-    public java.util.Iterator<cn.bertsir.zbar.Qr.Symbol> iterator() {
+    public java.util.Iterator<Symbol> iterator() {
         long sym = firstSymbol(peer);
         if (sym == 0)
-            return (new cn.bertsir.zbar.Qr.SymbolIterator(null));
+            return (new SymbolIterator(null));
 
-        return (new cn.bertsir.zbar.Qr.SymbolIterator(new cn.bertsir.zbar.Qr.Symbol(sym)));
+        return (new SymbolIterator(new Symbol(sym)));
     }
 
     /**

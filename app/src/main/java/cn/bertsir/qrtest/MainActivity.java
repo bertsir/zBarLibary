@@ -1,6 +1,7 @@
 package cn.bertsir.qrtest;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_show_flash;
     private CheckBox cb_show_album;
     private CheckBox cb_only_center;
+    private CheckBox cb_create_add_water;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_show_flash = (CheckBox) findViewById(R.id.cb_show_flash);
         cb_show_album = (CheckBox) findViewById(R.id.cb_show_album);
         cb_only_center = (CheckBox) findViewById(R.id.cb_only_center);
+        cb_create_add_water = (CheckBox) findViewById(R.id.cb_create_add_water);
         rb_qrcode = (RadioButton) findViewById(R.id.rb_qrcode);
         rb_bcode = (RadioButton) findViewById(R.id.rb_bcode);
         rb_all = (RadioButton) findViewById(R.id.rb_all);
@@ -95,7 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 start();
                 break;
             case R.id.bt_make:
-                Bitmap qrCode = QRUtils.getInstance().createQRCode(et_qr_content.getText().toString());
+                Bitmap qrCode = null;
+                if (cb_create_add_water.isChecked()) {
+                    qrCode = QRUtils.getInstance().createQRCodeAddLogo(et_qr_content.getText().toString(),
+                            BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                } else {
+                    qrCode = QRUtils.getInstance().createQRCode(et_qr_content.getText().toString());
+                }
                 iv_qr.setImageBitmap(qrCode);
                 Toast.makeText(getApplicationContext(), "长按可识别", Toast.LENGTH_LONG).show();
                 break;
@@ -105,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void start() {
         int scan_type = 0;
         int scan_view_type = 0;
-        if(rb_all.isChecked()){
+        if (rb_all.isChecked()) {
             scan_type = QrConfig.TYPE_ALL;
             scan_view_type = QrConfig.SCANVIEW_TYPE_QRCODE;
-        }else if(rb_qrcode.isChecked()){
+        } else if (rb_qrcode.isChecked()) {
             scan_type = QrConfig.TYPE_QRCODE;
             scan_view_type = QrConfig.SCANVIEW_TYPE_QRCODE;
-        }else if(rb_bcode.isChecked()) {
+        } else if (rb_bcode.isChecked()) {
             scan_type = QrConfig.TYPE_BARCODE;
             scan_view_type = QrConfig.SCANVIEW_TYPE_BARCODE;
         }
@@ -128,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setScanViewType(scan_view_type)//设置扫描框类型（二维码还是条形码，默认为二维码）
                 .setCustombarcodeformat(QrConfig.BARCODE_EAN13)//此项只有在扫码类型为TYPE_CUSTOM时才有效
                 .setPlaySound(cb_show_ding.isChecked())//是否扫描成功后bi~的声音
-                .setDingPath(cb_show_custom_ding.isChecked() ? R.raw.test: R.raw.qrcode)//设置提示音(不设置为默认的Ding~)
+                .setDingPath(cb_show_custom_ding.isChecked() ? R.raw.test : R.raw.qrcode)//设置提示音(不设置为默认的Ding~)
                 .setIsOnlyCenter(cb_only_center.isChecked())//是否只识别框中内容(默认为全屏识别)
                 .setTitleText(et_qr_title.getText().toString())//设置Tilte文字
                 .setTitleBackgroudColor(Color.parseColor("#262020"))//设置状态栏颜色

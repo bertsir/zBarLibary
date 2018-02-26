@@ -97,6 +97,13 @@
              android:text="是否只扫描框中内容"
              android:checked="true"
              />
+         <CheckBox
+             android:id="@+id/cb_create_add_water"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="生成二维码添加logo"
+             android:checked="true"
+             />
          <RadioGroup
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

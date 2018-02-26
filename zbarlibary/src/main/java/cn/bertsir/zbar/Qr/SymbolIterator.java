@@ -29,16 +29,16 @@ package cn.bertsir.zbar.Qr;
  * Iterator over a SymbolSet.
  */
 public class SymbolIterator
-        implements java.util.Iterator<cn.bertsir.zbar.Qr.Symbol> {
+        implements java.util.Iterator<Symbol> {
     /**
      * Next symbol to be returned by the iterator.
      */
-    private cn.bertsir.zbar.Qr.Symbol current;
+    private Symbol current;
 
     /**
      * SymbolIterators are only created by internal interface methods.
      */
-    SymbolIterator(cn.bertsir.zbar.Qr.Symbol first) {
+    SymbolIterator(Symbol first) {
         current = first;
     }
 
@@ -52,15 +52,15 @@ public class SymbolIterator
     /**
      * Retrieves the next element in the iteration.
      */
-    public cn.bertsir.zbar.Qr.Symbol next() {
+    public Symbol next() {
         if (current == null)
             throw (new java.util.NoSuchElementException
                     ("access past end of SymbolIterator"));
 
-        cn.bertsir.zbar.Qr.Symbol result = current;
+        Symbol result = current;
         long sym = current.next();
         if (sym != 0)
-            current = new cn.bertsir.zbar.Qr.Symbol(sym);
+            current = new Symbol(sym);
         else
             current = null;
         return (result);

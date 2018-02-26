@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
@@ -22,6 +24,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
+import java.util.Hashtable;
 
 /**
  * Created by Bert on 2017/9/20.
@@ -59,9 +64,11 @@ public class QRUtils {
         BitMatrix result = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            result = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, width, height);
+            Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.Q);//这里调整二维码的容错率
+            hints.put(EncodeHintType.MARGIN, 1);   //设置白边取值1-4，值越大白边越大
             result = multiFormatWriter.encode(new String(content.getBytes("UTF-8"),"ISO-8859-1"), BarcodeFormat
-                    .QR_CODE, width, height);
+                    .QR_CODE, width, height,hints);
             int w = result.getWidth();
             int h = result.getHeight();
             int[] pixels = new int[w * h];
@@ -73,14 +80,39 @@ public class QRUtils {
             }
             bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return bitmap;
     }
 
+
+    /**
+     * 生成带logo的二维码
+     * @param content
+     * @param logo
+     * @return
+     */
+    public Bitmap createQRCodeAddLogo(String content,Bitmap logo){
+        Bitmap qrCode = createQRCode(content);
+        int qrheight = qrCode.getHeight();
+        int qrwidth = qrCode.getWidth();
+        int waterWidth = (int) (qrwidth * 0.3);//0.3为logo占二维码大小的倍数 建议不要过大，否则二维码失效
+        float scale = waterWidth / (float) logo.getWidth();
+        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo,scale));
+        return waterQrcode;
+    }
+
+
+    public Bitmap createQRCodeAddLogo(String content,int width,int height,Bitmap logo){
+        Bitmap qrCode = createQRCode(content,width,height);
+        int qrheight = qrCode.getHeight();
+        int qrwidth = qrCode.getWidth();
+        int waterWidth = (int) (qrwidth * 0.3);//0.3为logo占二维码大小的倍数 建议不要过大，否则二维码失效
+        float scale = waterWidth / (float) logo.getWidth();
+        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo,scale));
+        return waterQrcode;
+    }
 
     /**
      * 识别本地二维码
@@ -113,7 +145,6 @@ public class QRUtils {
         }
 
     }
-
 
 
     public String decodeQRcode(ImageView iv) throws Exception{
@@ -282,6 +313,53 @@ public class QRUtils {
         return newBitmap;
     }
 
+    /**
+     * 设置水印图片到中间
+     *
+     * @param src
+     * @param watermark
+     * @return
+     */
+    private Bitmap createWaterMaskCenter(Bitmap src, Bitmap watermark) {
+        return createWaterMaskBitmap(src, watermark,
+                (src.getWidth() - watermark.getWidth()) / 2,
+                (src.getHeight() - watermark.getHeight()) / 2);
+    }
 
+    private Bitmap createWaterMaskBitmap(Bitmap src, Bitmap watermark, int paddingLeft, int paddingTop) {
+        if (src == null) {
+            return null;
+        }
+        int width = src.getWidth();
+        int height = src.getHeight();
+        Bitmap newb = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
+        Canvas canvas = new Canvas(newb);
+        canvas.drawBitmap(src, 0, 0, null);
+        canvas.drawBitmap(watermark, paddingLeft, paddingTop, null);
+        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+        return newb;
+    }
+
+    /**
+     * 缩放Bitmap
+     * @param bm
+     * @param f
+     * @return
+     */
+    private Bitmap zoomImg(Bitmap bm, float f) {
+
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+
+        float scaleWidth = f;
+        float scaleHeight = f;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return newbm;
+    }
 
 }

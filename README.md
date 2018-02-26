@@ -5,13 +5,19 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ## 预览
 ![](http://upload-images.jianshu.io/upload_images/3029020-b0044075b21b2f7c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
 ![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
-![newVersion.jpg](http://upload-images.jianshu.io/upload_images/3029020-c62cf474fe16df3c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
+!![微信图片_20180226114319.jpg](http://upload-images.jianshu.io/upload_images/3029020-c7c79b6af4da6960.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
 
 
 ## 更新日志
 
 ### 计划功能
 1.加入内部权限处理
+
+### 2018-02-26
+1.新增生成带logo的二维码</br>
+2.调整生成二维码的边框值</br>
+3.提升生成二维码的容错率</br>
+
 
 ### 2018-02-09
 1.修复了从相册选择二维码无结果返回的BUG
@@ -60,7 +66,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.0'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.1'
 </pre>
 
 
@@ -120,7 +126,11 @@ OK,就这么简单！
 <pre>
 Bitmap qrCode = QRUtils.getInstance().createQRCode("www.qq.com");
 </pre>
-*注：生成二维码暂不支持中文内容
+
+### 2.1生成二维码并添加Logo
+<pre>
+Bitmap qrCode = QRUtils.getInstance().createQRCodeAddLogo(et_qr_content.getText().toString(),BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+</pre>
 
 ## 3.识别本地二维码
 <pre>
