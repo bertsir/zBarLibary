@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.ColorInt;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +41,7 @@ public class QRUtils {
 
 
     public static QRUtils getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new QRUtils();
         return instance;
     }
@@ -47,19 +49,21 @@ public class QRUtils {
 
     /**
      * 生成二维码
+     *
      * @param content
      * @return
      */
-    public Bitmap createQRCode(String content){
-        return createQRCode(content,300,300);
+    public Bitmap createQRCode(String content) {
+        return createQRCode(content, 300, 300);
     }
 
     /**
      * 生成二维码
+     *
      * @param content
      * @return
      */
-    public Bitmap createQRCode(String content,int width,int height){
+    public Bitmap createQRCode(String content, int width, int height) {
         Bitmap bitmap = null;
         BitMatrix result = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -67,8 +71,8 @@ public class QRUtils {
             Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.Q);//这里调整二维码的容错率
             hints.put(EncodeHintType.MARGIN, 1);   //设置白边取值1-4，值越大白边越大
-            result = multiFormatWriter.encode(new String(content.getBytes("UTF-8"),"ISO-8859-1"), BarcodeFormat
-                    .QR_CODE, width, height,hints);
+            result = multiFormatWriter.encode(new String(content.getBytes("UTF-8"), "ISO-8859-1"), BarcodeFormat
+                    .QR_CODE, width, height, hints);
             int w = result.getWidth();
             int h = result.getHeight();
             int[] pixels = new int[w * h];
@@ -89,39 +93,41 @@ public class QRUtils {
 
     /**
      * 生成带logo的二维码
+     *
      * @param content
      * @param logo
      * @return
      */
-    public Bitmap createQRCodeAddLogo(String content,Bitmap logo){
+    public Bitmap createQRCodeAddLogo(String content, Bitmap logo) {
         Bitmap qrCode = createQRCode(content);
         int qrheight = qrCode.getHeight();
         int qrwidth = qrCode.getWidth();
         int waterWidth = (int) (qrwidth * 0.3);//0.3为logo占二维码大小的倍数 建议不要过大，否则二维码失效
         float scale = waterWidth / (float) logo.getWidth();
-        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo,scale));
+        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo, scale));
         return waterQrcode;
     }
 
 
-    public Bitmap createQRCodeAddLogo(String content,int width,int height,Bitmap logo){
-        Bitmap qrCode = createQRCode(content,width,height);
+    public Bitmap createQRCodeAddLogo(String content, int width, int height, Bitmap logo) {
+        Bitmap qrCode = createQRCode(content, width, height);
         int qrheight = qrCode.getHeight();
         int qrwidth = qrCode.getWidth();
         int waterWidth = (int) (qrwidth * 0.3);//0.3为logo占二维码大小的倍数 建议不要过大，否则二维码失效
         float scale = waterWidth / (float) logo.getWidth();
-        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo,scale));
+        Bitmap waterQrcode = createWaterMaskCenter(qrCode, zoomImg(logo, scale));
         return waterQrcode;
     }
 
     /**
      * 识别本地二维码
+     *
      * @param url
      * @return
      */
-    public String decodeQRcode(String url) throws Exception{
+    public String decodeQRcode(String url) throws Exception {
         Bitmap obmp = BitmapFactory.decodeFile(url);
-        if(obmp != null){
+        if (obmp != null) {
             int width = obmp.getWidth();
             int height = obmp.getHeight();
             int[] data = new int[width * height];
@@ -140,40 +146,40 @@ public class QRUtils {
             } else {
                 return re.getText();
             }
-        }else {
+        } else {
             return "";
         }
 
     }
 
 
-    public String decodeQRcode(ImageView iv) throws Exception{
+    public String decodeQRcode(ImageView iv) throws Exception {
         Bitmap obmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
-            int width = obmp.getWidth();
-            int height = obmp.getHeight();
-            int[] data = new int[width * height];
-            obmp.getPixels(data, 0, width, 0, 0, width, height);
-            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-            QRCodeReader reader = new QRCodeReader();
-            Result re = null;
-            try {
-                re = reader.decode(bitmap1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (re == null) {
-                return "";
-            } else {
-                return re.getText();
-            }
+        int width = obmp.getWidth();
+        int height = obmp.getHeight();
+        int[] data = new int[width * height];
+        obmp.getPixels(data, 0, width, 0, 0, width, height);
+        RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
+        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+        QRCodeReader reader = new QRCodeReader();
+        Result re = null;
+        try {
+            re = reader.decode(bitmap1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (re == null) {
+            return "";
+        } else {
+            return re.getText();
+        }
 
 
     }
 
-    public String decodeQRcode(Bitmap bm) throws Exception{
+    public String decodeQRcode(Bitmap bm) throws Exception {
         Bitmap obmp = bm;
-        if(bm != null){
+        if (bm != null) {
             int width = obmp.getWidth();
             int height = obmp.getHeight();
             int[] data = new int[width * height];
@@ -192,7 +198,7 @@ public class QRUtils {
             } else {
                 return re.getText();
             }
-        }else {
+        } else {
             return "";
         }
 
@@ -200,41 +206,63 @@ public class QRUtils {
 
     /**
      * 生成条形码
+     *
      * @param context
      * @param contents
      * @param desiredWidth
      * @param desiredHeight
-     * @param displayCode
      * @return
      */
-    public  Bitmap creatBarcode(Context context, String contents, int desiredWidth, int desiredHeight, boolean displayCode) {
-        Bitmap ruseltBitmap = null;
-        /**
-         * 图片两端所保留的空白的宽度
-         */
-        int marginW = 20;
+    public Bitmap createBarcode(Context context, String contents, int desiredWidth, int desiredHeight) {
+        if (TextUtils.isEmpty(contents)) {
+            throw new NullPointerException("contents not be null");
+        }
+        if (desiredWidth == 0 || desiredHeight == 0) {
+            throw new NullPointerException("desiredWidth or desiredHeight not be null");
+        }
+        Bitmap resultBitmap;
         /**
          * 条形码的编码类型
          */
         BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
 
-        if (displayCode) {
-            Bitmap barcodeBitmap = encodeAsBitmap(contents, barcodeFormat,
-                    desiredWidth, desiredHeight);
-            Bitmap codeBitmap = creatCodeBitmap(contents, desiredWidth + 2
-                    * marginW, desiredHeight, context);
-            ruseltBitmap = mixtureBitmap(barcodeBitmap, codeBitmap, new PointF(
-                    0, desiredHeight));
-        } else {
-            ruseltBitmap = encodeAsBitmap(contents, barcodeFormat,
-                    desiredWidth, desiredHeight);
-        }
-
-        return ruseltBitmap;
+        resultBitmap = encodeAsBitmap(contents, barcodeFormat,
+                desiredWidth, desiredHeight);
+        return resultBitmap;
     }
 
+    public Bitmap createBarCodeWithText(Context context, String contents, int desiredWidth,
+                                        int desiredHeight) {
+        return createBarCodeWithText(context, contents, desiredWidth, desiredHeight, null);
+    }
 
-    private  Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int desiredWidth, int desiredHeight) {
+    public Bitmap createBarCodeWithText(Context context, String contents, int desiredWidth,
+                                        int desiredHeight, TextViewConfig config) {
+        if (TextUtils.isEmpty(contents)) {
+            throw new NullPointerException("contents not be null");
+        }
+        if (desiredWidth == 0 || desiredHeight == 0) {
+            throw new NullPointerException("desiredWidth or desiredHeight not be null");
+        }
+        Bitmap resultBitmap;
+
+        /**
+         * 条形码的编码类型
+         */
+        BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
+
+        Bitmap barcodeBitmap = encodeAsBitmap(contents, barcodeFormat,
+                desiredWidth, desiredHeight);
+
+        Bitmap codeBitmap = createCodeBitmap(contents, barcodeBitmap.getWidth(),
+                barcodeBitmap.getHeight(), context, config);
+
+        resultBitmap = mixtureBitmap(barcodeBitmap, codeBitmap, new PointF(
+                0, desiredHeight));
+        return resultBitmap;
+    }
+
+    private Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int desiredWidth, int desiredHeight) {
         final int WHITE = 0xFFFFFFFF;
         final int BLACK = 0xFF000000;
 
@@ -267,24 +295,57 @@ public class QRUtils {
     }
 
 
-    private Bitmap creatCodeBitmap(String contents, int width, int height, Context context) {
+    private Bitmap createCodeBitmap(String contents, int width, int height, Context context,
+                                    TextViewConfig config) {
+        if (config == null) {
+            config = new TextViewConfig();
+        }
         TextView tv = new TextView(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(layoutParams);
         tv.setText(contents);
+        tv.setTextSize(config.size == 0 ? tv.getTextSize() : config.size);
         tv.setHeight(height);
-        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setGravity(config.gravity);
+        tv.setMaxLines(config.maxLines);
         tv.setWidth(width);
         tv.setDrawingCacheEnabled(true);
-        tv.setTextColor(Color.BLACK);
+        tv.setTextColor(config.color);
         tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
 
         tv.buildDrawingCache();
-        Bitmap bitmapCode = tv.getDrawingCache();
-        return bitmapCode;
+        return tv.getDrawingCache();
+    }
+
+    public static class TextViewConfig {
+
+        private int gravity = Gravity.CENTER;
+        private int maxLines = 1;
+        private @ColorInt
+        int color = Color.BLACK;
+        private float size;
+
+        public TextViewConfig() {
+        }
+
+        public void setGravity(int gravity) {
+            this.gravity = gravity;
+        }
+
+        public void setMaxLines(int maxLines) {
+            this.maxLines = maxLines;
+        }
+
+        public void setColor(int color) {
+            this.color = color;
+        }
+
+        public void setSize(float size) {
+            this.size = size;
+        }
     }
 
     /**
@@ -292,20 +353,20 @@ public class QRUtils {
      *
      * @param first
      * @param second
-     * @param fromPoint
-     *            第二个Bitmap开始绘制的起始位置（相对于第一个Bitmap）
+     * @param fromPoint 第二个Bitmap开始绘制的起始位置（相对于第一个Bitmap）
      * @return
      */
     private Bitmap mixtureBitmap(Bitmap first, Bitmap second, PointF fromPoint) {
         if (first == null || second == null || fromPoint == null) {
             return null;
         }
-        int marginW = 20;
+
+        int width = Math.max(first.getWidth(), second.getWidth());
         Bitmap newBitmap = Bitmap.createBitmap(
-                first.getWidth() + second.getWidth() + marginW,
+                width,
                 first.getHeight() + second.getHeight(), Bitmap.Config.ARGB_4444);
         Canvas cv = new Canvas(newBitmap);
-        cv.drawBitmap(first, marginW, 0, null);
+        cv.drawBitmap(first, 0, 0, null);
         cv.drawBitmap(second, fromPoint.x, fromPoint.y, null);
         cv.save(Canvas.ALL_SAVE_FLAG);
         cv.restore();
@@ -343,6 +404,7 @@ public class QRUtils {
 
     /**
      * 缩放Bitmap
+     *
      * @param bm
      * @param f
      * @return
