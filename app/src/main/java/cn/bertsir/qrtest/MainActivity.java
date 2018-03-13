@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                 } else {
                     qrCode = QRUtils.getInstance().createQRCode(et_qr_content.getText().toString());
+                    
                 }
                 iv_qr.setImageBitmap(qrCode);
                 Toast.makeText(getApplicationContext(), "长按可识别", Toast.LENGTH_LONG).show();

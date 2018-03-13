@@ -17,18 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.Hashtable;
+
+import cn.bertsir.zbar.Qr.Config;
+import cn.bertsir.zbar.Qr.Image;
+import cn.bertsir.zbar.Qr.ImageScanner;
+import cn.bertsir.zbar.Qr.Symbol;
+import cn.bertsir.zbar.Qr.SymbolSet;
 
 /**
  * Created by Bert on 2017/9/20.
@@ -45,6 +46,106 @@ public class QRUtils {
             instance = new QRUtils();
         return instance;
     }
+
+
+    /**
+     * 识别本地二维码
+     *
+     * @param url
+     * @return
+     */
+    public String decodeQRcode(String url) throws Exception {
+        Bitmap qrbmp = BitmapFactory.decodeFile(url);
+        if (qrbmp != null) {
+            return decodeQRcode(qrbmp);
+        } else {
+            return "";
+        }
+
+    }
+
+    public String decodeQRcode(ImageView iv) throws Exception {
+        Bitmap qrbmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
+        if (qrbmp != null) {
+            return decodeQRcode(qrbmp);
+        } else {
+            return "";
+        }
+    }
+
+    public String decodeQRcode(Bitmap barcodeBmp) throws Exception {
+        int    width      = barcodeBmp.getWidth();
+        int    height     = barcodeBmp.getHeight();
+        int[]  pixels     = new int[width * height];
+        barcodeBmp.getPixels(pixels, 0, width, 0, 0, width, height);
+        Image barcode = new Image(width, height, "RGB4");
+        barcode.setData(pixels);
+        ImageScanner reader       = new ImageScanner();
+        reader.setConfig(Symbol.NONE, Config.ENABLE, 0);
+        reader.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
+        int          result       = reader.scanImage(barcode.convert("Y800"));
+        String       qrCodeString = null;
+        if (result != 0) {
+            SymbolSet syms = reader.getResults();
+            for (Symbol sym : syms) {
+                qrCodeString = sym.getData();
+            }
+        }
+        return qrCodeString;
+    }
+
+    /**
+     * 识别本地条形码
+     *
+     * @param url
+     * @return
+     */
+    public String decodeBarcode(String url) throws Exception {
+        Bitmap qrbmp = BitmapFactory.decodeFile(url);
+        if (qrbmp != null) {
+            return decodeBarcode(qrbmp);
+        } else {
+            return "";
+        }
+
+    }
+
+    public String decodeBarcode(ImageView iv) throws Exception {
+        Bitmap qrbmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
+        if (qrbmp != null) {
+            return decodeBarcode(qrbmp);
+        } else {
+            return "";
+        }
+    }
+
+    public String decodeBarcode(Bitmap barcodeBmp) throws Exception {
+        int    width      = barcodeBmp.getWidth();
+        int    height     = barcodeBmp.getHeight();
+        int[]  pixels     = new int[width * height];
+        barcodeBmp.getPixels(pixels, 0, width, 0, 0, width, height);
+        Image barcode = new Image(width, height, "RGB4");
+        barcode.setData(pixels);
+        ImageScanner reader       = new ImageScanner();
+        reader.setConfig(Symbol.NONE, Config.ENABLE, 0);
+        reader.setConfig(Symbol.CODE128, Config.ENABLE, 1);
+        reader.setConfig(Symbol.CODE39, Config.ENABLE, 1);
+        reader.setConfig(Symbol.EAN13, Config.ENABLE, 1);
+        reader.setConfig(Symbol.EAN8, Config.ENABLE, 1);
+        reader.setConfig(Symbol.UPCA, Config.ENABLE, 1);
+        reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+        reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+        int          result       = reader.scanImage(barcode.convert("Y800"));
+        String       qrCodeString = null;
+        if (result != 0) {
+            SymbolSet syms = reader.getResults();
+            for (Symbol sym : syms) {
+                qrCodeString = sym.getData();
+            }
+        }
+        return qrCodeString;
+    }
+
 
 
     /**
@@ -120,91 +221,6 @@ public class QRUtils {
     }
 
     /**
-     * 识别本地二维码
-     *
-     * @param url
-     * @return
-     */
-    public String decodeQRcode(String url) throws Exception {
-        Bitmap obmp = BitmapFactory.decodeFile(url);
-        if (obmp != null) {
-            int width = obmp.getWidth();
-            int height = obmp.getHeight();
-            int[] data = new int[width * height];
-            obmp.getPixels(data, 0, width, 0, 0, width, height);
-            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-            QRCodeReader reader = new QRCodeReader();
-            Result re = null;
-            try {
-                re = reader.decode(bitmap1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (re == null) {
-                return "";
-            } else {
-                return re.getText();
-            }
-        } else {
-            return "";
-        }
-
-    }
-
-
-    public String decodeQRcode(ImageView iv) throws Exception {
-        Bitmap obmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
-        int width = obmp.getWidth();
-        int height = obmp.getHeight();
-        int[] data = new int[width * height];
-        obmp.getPixels(data, 0, width, 0, 0, width, height);
-        RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-        QRCodeReader reader = new QRCodeReader();
-        Result re = null;
-        try {
-            re = reader.decode(bitmap1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (re == null) {
-            return "";
-        } else {
-            return re.getText();
-        }
-
-
-    }
-
-    public String decodeQRcode(Bitmap bm) throws Exception {
-        Bitmap obmp = bm;
-        if (bm != null) {
-            int width = obmp.getWidth();
-            int height = obmp.getHeight();
-            int[] data = new int[width * height];
-            obmp.getPixels(data, 0, width, 0, 0, width, height);
-            RGBLuminanceSource source = new RGBLuminanceSource(width, height, data);
-            BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-            QRCodeReader reader = new QRCodeReader();
-            Result re = null;
-            try {
-                re = reader.decode(bitmap1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (re == null) {
-                return "";
-            } else {
-                return re.getText();
-            }
-        } else {
-            return "";
-        }
-
-    }
-
-    /**
      * 生成条形码
      *
      * @param context
@@ -213,6 +229,7 @@ public class QRUtils {
      * @param desiredHeight
      * @return
      */
+    @Deprecated
     public Bitmap createBarcode(Context context, String contents, int desiredWidth, int desiredHeight) {
         if (TextUtils.isEmpty(contents)) {
             throw new NullPointerException("contents not be null");
@@ -231,6 +248,15 @@ public class QRUtils {
         return resultBitmap;
     }
 
+    /**
+     * 生成条形码
+     *
+     * @param context
+     * @param contents
+     * @param desiredWidth
+     * @param desiredHeight
+     * @return
+     */
     public Bitmap createBarCodeWithText(Context context, String contents, int desiredWidth,
                                         int desiredHeight) {
         return createBarCodeWithText(context, contents, desiredWidth, desiredHeight, null);
@@ -404,7 +430,6 @@ public class QRUtils {
 
     /**
      * 缩放Bitmap
-     *
      * @param bm
      * @param f
      * @return

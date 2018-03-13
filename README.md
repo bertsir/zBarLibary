@@ -1,5 +1,5 @@
 # zBarLibary
-zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在了一起，这样二维码识别就更便捷了
+zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在了一起，这样二维码识别就更便捷了（包含主要功能，二维码识别生成，条形码识别生成）
 
 
 ## 预览
@@ -12,6 +12,12 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ### 计划功能
 1.加入内部权限处理
+
+### 2018-03-13
+1.修复生成条形码时下方文字的BUG（感谢simplepeng）</br>
+2.优化识别本地二维码（由zxing识别转为zbar识别，大幅提升复杂图片中二维码的识别）</br>
+3.新增识别本地条形码</br>
+
 
 ### 2018-02-26
 1.新增生成带logo的二维码</br>
@@ -66,7 +72,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.1'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.2'
 </pre>
 
 
@@ -122,20 +128,34 @@ OK,就这么简单！
 
 ##### 如果扫描界面不符合你的需求，来吧QRActivity的布局文件你随便改，保证改起来比别的库简单！
 
-## 2.生成二维码
+## 2.生成码
+###  2.1生成二维码 
 <pre>
 Bitmap qrCode = QRUtils.getInstance().createQRCode("www.qq.com");
 </pre>
 
-### 2.1生成二维码并添加Logo
+####  2.1.1生成二维码并添加Logo
 <pre>
 Bitmap qrCode = QRUtils.getInstance().createQRCodeAddLogo(et_qr_content.getText().toString(),BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 </pre>
+###  2.2生成条形码
+<pre>
+QRUtils.TextViewConfig textViewConfig = new QRUtils.TextViewConfig();
+textViewConfig.setSize(10);
+ Bitmap barCodeWithText = QRUtils.getInstance().createBarCodeWithText(getApplicationContext(), content, 300, 100, textViewConfig);
+</pre>
 
-## 3.识别本地二维码
+## 3.识别本地
+### 3.1 识别本地二维码
 <pre>
 //可以传图片路径，Bitmap,ImageView 是不是很人性化
 String s = QRUtils.getInstance().decodeQRcode(iv_qr);
+</pre>
+
+### 3.2 识别本地条形码
+<pre>
+//可以传图片路径，Bitmap,ImageView 是不是很人性化
+String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 </pre>
 
 ## 4.参数描述

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.1.1" // 修改为你的版本号
+version = "1.1.2" // 修改为你的版本号
 
 android {
     compileSdkVersion 25
@@ -109,4 +109,4 @@ bintray {
         publish = true
     }
 }
-//先执行 gradlew install ，然后执行 gradlew bintrayUpload
+//先执行   chmod a+x ./gradlew   ./gradlew install ，然后执行 ./gradlew bintrayUpload
