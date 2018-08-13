@@ -31,7 +31,6 @@ import java.util.List;
 
 /**
  * <p>Camera config.</p>
- * Created by Yan Zhenjie on 2017/5/10.
  */
 public final class CameraConfiguration {
 

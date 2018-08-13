@@ -17,7 +17,6 @@ package cn.bertsir.zbar;
 
 /**
  * <p>Scan results callback.</p>
- * Created by Yan Zhenjie on 2017/5/5.
  */
 public interface ScanCallback {
 

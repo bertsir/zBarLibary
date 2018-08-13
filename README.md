@@ -10,7 +10,7 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
-### 计划功能
+### 2018-08-13
 1.加入内部权限处理
 
 ### 2018-03-13
@@ -72,7 +72,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.2'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.3'
 </pre>
 
 

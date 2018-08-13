@@ -64,7 +64,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         try {
             mCameraManager.openDriver();
         } catch (Exception e) {
-            Toast.makeText(getContext(),"摄像头权限被拒绝！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
             return false;
         }
         mPreviewCallback.onStart();

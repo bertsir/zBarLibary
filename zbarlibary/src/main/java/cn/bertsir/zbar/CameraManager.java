@@ -23,11 +23,10 @@ import java.io.IOException;
 
 /**
  * <p>Camera manager.</p>
- * Created by Yan Zhenjie on 2017/5/10.
  */
 public final class CameraManager {
 
-    private final cn.bertsir.zbar.CameraConfiguration mConfiguration;
+    private final CameraConfiguration mConfiguration;
 
     private Camera mCamera;
 
@@ -52,12 +51,14 @@ public final class CameraManager {
         String parametersFlattened = parameters == null ? null : parameters.flatten();
         try {
             mConfiguration.setDesiredCameraParameters(mCamera, false);
+
         } catch (RuntimeException re) {
             if (parametersFlattened != null) {
                 parameters = mCamera.getParameters();
                 parameters.unflatten(parametersFlattened);
                 try {
                     mCamera.setParameters(parameters);
+
                     mConfiguration.setDesiredCameraParameters(mCamera, true);
                 } catch (RuntimeException e) {
                     e.printStackTrace();

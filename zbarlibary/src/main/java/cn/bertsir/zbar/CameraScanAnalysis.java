@@ -31,7 +31,6 @@ import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.Qr.SymbolSet;
 
 /**
- * Created by Yan Zhenjie on 2017/5/5.
  */
 class CameraScanAnalysis implements Camera.PreviewCallback {
 
