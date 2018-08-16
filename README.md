@@ -1,4 +1,7 @@
 # zBarLibary
+
+![](http://tu.bertsir.top/images/2018/08/16/af08f029cb75ae29714cf72d2a64c04076855dcf196f31-OFUbTs_fw658_meitu_3.jpg)
+
 zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在了一起，这样二维码识别就更便捷了（包含主要功能，二维码识别生成，条形码识别生成）
 
 
