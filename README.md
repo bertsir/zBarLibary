@@ -12,6 +12,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2018-08-21
+1.将最低编译版本由18(Android 4.3)降至15(Android 4.0.3)
+
 ### 2018-08-13
 1.加入内部权限处理
 
@@ -74,7 +77,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.3'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.4'
 </pre>
 
 
