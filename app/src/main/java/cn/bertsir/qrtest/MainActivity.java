@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import cn.bertsir.zbar.QRUtils;
+import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.QrManager;
 

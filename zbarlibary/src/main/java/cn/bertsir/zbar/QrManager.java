@@ -43,7 +43,7 @@ public class QrManager {
         }
 
 
-        PermissionUtils.permission(activity, PermissionConstants.CAMERA)
+        PermissionUtils.permission(activity, PermissionConstants.CAMERA,PermissionConstants.STORAGE)
                 .rationale(new PermissionUtils.OnRationaleListener() {
                     @Override
                     public void rationale(final ShouldRequest shouldRequest) {

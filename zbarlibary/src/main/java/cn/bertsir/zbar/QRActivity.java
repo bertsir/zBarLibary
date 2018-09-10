@@ -2,15 +2,12 @@ package cn.bertsir.zbar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.bertsir.zbar.Qr.Symbol;
+import cn.bertsir.zbar.utils.GetPathFromUri;
+import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.view.ScanView;
 
 public class QRActivity extends Activity implements View.OnClickListener {
@@ -40,6 +39,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private FrameLayout fl_title;
     private TextView tv_des;
     private QrConfig options;
+    static final int REQUEST_IMAGE_GET = 1;
 
 
     @Override
@@ -147,10 +147,27 @@ public class QRActivity extends Activity implements View.OnClickListener {
      * 从相册选择
      */
     private void fromAlbum() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, 1);
+
+        if (QRUtils.getInstance().isMIUI()) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(Intent.createChooser(intent, "选择要识别的图片"), REQUEST_IMAGE_GET);
+        } else {//直接跳到系统相册去选取视频
+            Intent intent = new Intent();
+            if (Build.VERSION.SDK_INT < 19) {
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+            } else {
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+            }
+            startActivityForResult(Intent.createChooser(intent, "选择要识别的图片"), REQUEST_IMAGE_GET);
+        }
     }
 
 
@@ -169,38 +186,47 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            final Uri uri = data.getData();
-            final ContentResolver cr = this.getContentResolver();
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {//从相册选取视频
+            final String imagePath = GetPathFromUri.getPath(this, data.getData());
             textDialog = showProgressDialog();
             textDialog.setText("请稍后...");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Bitmap Qrbitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                        final String qrcontent = QRUtils.getInstance().decodeQRcode(Qrbitmap);
-                        Qrbitmap.recycle();
-                        Qrbitmap = null;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(!TextUtils.isEmpty(qrcontent)){
-                                        closeProgressDialog();
-                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
-                                        finish();
-                                    }else {
-                                        Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                        closeProgressDialog();
-                                    }
+                        if(TextUtils.isEmpty(imagePath)){
+                            Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!TextUtils.isEmpty(qrcontent)){
+                                    closeProgressDialog();
+                                    QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                    finish();
+                                }else {
+                                    Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                    closeProgressDialog();
                                 }
-                            });
+                            }
+                        });
                     } catch (Exception e) {
                         Log.e("Exception", e.getMessage(), e);
+                        Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                        closeProgressDialog();
                     }
                 }
             }).start();
         }
+
+//        if (resultCode == RESULT_OK) {
+//            final Uri uri = data.getData();
+//            final ContentResolver cr = this.getContentResolver();
+//
+//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

@@ -1,4 +1,4 @@
-package cn.bertsir.zbar;
+package cn.bertsir.zbar.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -55,7 +56,9 @@ public class QRUtils {
      * @return
      */
     public String decodeQRcode(String url) throws Exception {
-        Bitmap qrbmp = BitmapFactory.decodeFile(url);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap qrbmp = BitmapFactory.decodeFile(url,options);
         if (qrbmp != null) {
             return decodeQRcode(qrbmp);
         } else {
@@ -74,17 +77,17 @@ public class QRUtils {
     }
 
     public String decodeQRcode(Bitmap barcodeBmp) throws Exception {
-        int    width      = barcodeBmp.getWidth();
-        int    height     = barcodeBmp.getHeight();
-        int[]  pixels     = new int[width * height];
+        int width = barcodeBmp.getWidth();
+        int height = barcodeBmp.getHeight();
+        int[] pixels = new int[width * height];
         barcodeBmp.getPixels(pixels, 0, width, 0, 0, width, height);
         Image barcode = new Image(width, height, "RGB4");
         barcode.setData(pixels);
-        ImageScanner reader       = new ImageScanner();
+        ImageScanner reader = new ImageScanner();
         reader.setConfig(Symbol.NONE, Config.ENABLE, 0);
         reader.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
-        int          result       = reader.scanImage(barcode.convert("Y800"));
-        String       qrCodeString = null;
+        int result = reader.scanImage(barcode.convert("Y800"));
+        String qrCodeString = null;
         if (result != 0) {
             SymbolSet syms = reader.getResults();
             for (Symbol sym : syms) {
@@ -120,13 +123,13 @@ public class QRUtils {
     }
 
     public String decodeBarcode(Bitmap barcodeBmp) throws Exception {
-        int    width      = barcodeBmp.getWidth();
-        int    height     = barcodeBmp.getHeight();
-        int[]  pixels     = new int[width * height];
+        int width = barcodeBmp.getWidth();
+        int height = barcodeBmp.getHeight();
+        int[] pixels = new int[width * height];
         barcodeBmp.getPixels(pixels, 0, width, 0, 0, width, height);
         Image barcode = new Image(width, height, "RGB4");
         barcode.setData(pixels);
-        ImageScanner reader       = new ImageScanner();
+        ImageScanner reader = new ImageScanner();
         reader.setConfig(Symbol.NONE, Config.ENABLE, 0);
         reader.setConfig(Symbol.CODE128, Config.ENABLE, 1);
         reader.setConfig(Symbol.CODE39, Config.ENABLE, 1);
@@ -135,8 +138,8 @@ public class QRUtils {
         reader.setConfig(Symbol.UPCA, Config.ENABLE, 1);
         reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
         reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
-        int          result       = reader.scanImage(barcode.convert("Y800"));
-        String       qrCodeString = null;
+        int result = reader.scanImage(barcode.convert("Y800"));
+        String qrCodeString = null;
         if (result != 0) {
             SymbolSet syms = reader.getResults();
             for (Symbol sym : syms) {
@@ -145,7 +148,6 @@ public class QRUtils {
         }
         return qrCodeString;
     }
-
 
 
     /**
@@ -170,7 +172,7 @@ public class QRUtils {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.Q);//这里调整二维码的容错率
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);//这里调整二维码的容错率
             hints.put(EncodeHintType.MARGIN, 1);   //设置白边取值1-4，值越大白边越大
             result = multiFormatWriter.encode(new String(content.getBytes("UTF-8"), "ISO-8859-1"), BarcodeFormat
                     .QR_CODE, width, height, hints);
@@ -430,6 +432,7 @@ public class QRUtils {
 
     /**
      * 缩放Bitmap
+     *
      * @param bm
      * @param f
      * @return
@@ -447,6 +450,15 @@ public class QRUtils {
 
         Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
         return newbm;
+    }
+
+
+    public boolean isMIUI() {
+        String manufacturer = Build.MANUFACTURER;
+        if ("xiaomi".equalsIgnoreCase(manufacturer)) {
+            return true;
+        }
+        return false;
     }
 
 }
