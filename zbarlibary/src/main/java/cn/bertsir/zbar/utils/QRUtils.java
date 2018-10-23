@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,10 +19,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.Hashtable;
@@ -96,6 +106,51 @@ public class QRUtils {
         }
         return qrCodeString;
     }
+
+
+    /**
+     * 扫描二维码图片的方法
+     * @param path
+     * @return
+     */
+    public String decodeQRcodeByZxing(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+
+        }
+        Hashtable<DecodeHintType, String> hints = new Hashtable();
+        hints.put(DecodeHintType.CHARACTER_SET, "UTF-8"); // 设置二维码内容的编码
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // 先获取原大小
+        scanBitmap = BitmapFactory.decodeFile(path,options);
+        options.inJustDecodeBounds = false;
+        int sampleSize = (int) (options.outHeight / (float) 200);
+        if (sampleSize <= 0)
+            sampleSize = 1;
+
+        options.inSampleSize = sampleSize;
+
+        scanBitmap = BitmapFactory.decodeFile(path, options);
+        int[] data = new int[scanBitmap.getWidth() * scanBitmap.getHeight()];
+        scanBitmap.getPixels(data, 0, scanBitmap.getWidth(), 0, 0, scanBitmap.getWidth(), scanBitmap.getHeight());
+        RGBLuminanceSource rgbLuminanceSource = new RGBLuminanceSource(scanBitmap.getWidth(),scanBitmap.getHeight(),data);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(rgbLuminanceSource));
+        QRCodeReader reader = new QRCodeReader();
+        Result result = null;
+        try {
+            result = reader.decode(binaryBitmap, hints);
+        } catch (NotFoundException e) {
+            Log.e("hxy","NotFoundException");
+        }catch (ChecksumException e){
+            Log.e("hxy","ChecksumException");
+        }catch(FormatException e){
+            Log.e("hxy","FormatException");
+        }
+
+        return result.getText();
+
+    }
+
 
     /**
      * 识别本地条形码

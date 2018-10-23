@@ -198,7 +198,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                             Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
+                        //优先使用zbar识别
                         final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -208,8 +208,17 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                     QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
                                     finish();
                                 }else {
-                                    Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                    closeProgressDialog();
+                                    //尝试用zxing再试一次
+                                    final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
+                                    if(!TextUtils.isEmpty(qrcontent)){
+                                        closeProgressDialog();
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                        finish();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                        closeProgressDialog();
+                                    }
+
                                 }
                             }
                         });
