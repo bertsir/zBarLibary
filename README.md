@@ -191,6 +191,11 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setDingPath | int| 自定义提示音（举例：R.raw.test，不设置为默认的) |
 
 
+## 5.混淆
+<pre>
+-keep class cn.bertsir.zbar.Qr.** { *; }
+</pre>
+
 #### 二维码也就这些需求吧，这么简单就可以搞定了，识别速度是zxing的很多倍！方便了你的话可不可以给个Start，如遇BUG请Issues
 
 
