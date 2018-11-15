@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,7 +29,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -127,27 +126,28 @@ public class QRUtils {
         int sampleSize = (int) (options.outHeight / (float) 200);
         if (sampleSize <= 0)
             sampleSize = 1;
-
         options.inSampleSize = sampleSize;
-
         scanBitmap = BitmapFactory.decodeFile(path, options);
         int[] data = new int[scanBitmap.getWidth() * scanBitmap.getHeight()];
         scanBitmap.getPixels(data, 0, scanBitmap.getWidth(), 0, 0, scanBitmap.getWidth(), scanBitmap.getHeight());
         RGBLuminanceSource rgbLuminanceSource = new RGBLuminanceSource(scanBitmap.getWidth(),scanBitmap.getHeight(),data);
-        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(rgbLuminanceSource));
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new GlobalHistogramBinarizer(rgbLuminanceSource));
         QRCodeReader reader = new QRCodeReader();
         Result result = null;
         try {
             result = reader.decode(binaryBitmap, hints);
         } catch (NotFoundException e) {
-            Log.e("hxy","NotFoundException");
-        }catch (ChecksumException e){
-            Log.e("hxy","ChecksumException");
-        }catch(FormatException e){
-            Log.e("hxy","FormatException");
-        }
 
-        return result.getText();
+        }catch (ChecksumException e){
+
+        }catch(FormatException e){
+
+        }
+        if(result == null){
+            return "";
+        }else {
+            return result.getText();
+        }
 
     }
 

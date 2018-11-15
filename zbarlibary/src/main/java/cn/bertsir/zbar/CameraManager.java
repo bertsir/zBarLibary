@@ -151,6 +151,9 @@ public final class CameraManager {
     public void setFlash(){
         if(mCamera != null){
             Camera.Parameters parameters = mCamera.getParameters();
+            if(parameters.getFlashMode() == null) {
+                return;
+            }
             if(parameters.getFlashMode().endsWith(Camera.Parameters.FLASH_MODE_TORCH)){
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
             }else {
@@ -166,6 +169,9 @@ public final class CameraManager {
     public void setFlash(boolean open){
         if(mCamera != null){
             Camera.Parameters parameters = mCamera.getParameters();
+            if(parameters.getFlashMode() == null) {
+                return;
+            }
             if(!open){
                 if(parameters.getFlashMode().endsWith(Camera.Parameters.FLASH_MODE_TORCH)){
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
