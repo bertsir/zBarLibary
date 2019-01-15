@@ -26,6 +26,7 @@ public class QrConfig implements Serializable {
     public boolean show_light = true;
     public boolean show_album = true;
     public boolean show_des = true;
+    public boolean need_crop = true;
 
 
 
@@ -162,6 +163,10 @@ public class QrConfig implements Serializable {
         return show_des;
     }
 
+    public boolean isNeed_crop(){
+        return need_crop;
+    }
+
     public String getTitle_text() {
         return title_text;
     }
@@ -248,6 +253,11 @@ public class QrConfig implements Serializable {
 
         public Builder setShowDes(boolean show){
             watcher.show_des = show;
+            return this;
+        }
+
+        public Builder setNeedCrop(boolean crop){
+            watcher.need_crop = crop;
             return this;
         }
 

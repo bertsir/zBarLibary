@@ -104,6 +104,13 @@
              android:text="生成二维码添加logo"
              android:checked="true"
              />
+         <CheckBox
+             android:id="@+id/cb_crop_image"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="从相册选择并裁剪"
+             android:checked="true"
+             />
          <RadioGroup
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

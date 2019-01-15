@@ -3,7 +3,6 @@ package cn.bertsir.zbar.utils;
 import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -61,7 +60,7 @@ public final class PermissionConstants {
             permission.READ_EXTERNAL_STORAGE, permission.WRITE_EXTERNAL_STORAGE
     };
 
-    @StringDef({CALENDAR, CAMERA, CONTACTS, LOCATION, MICROPHONE, PHONE, SENSORS, SMS, STORAGE,})
+    //@StringDef({CALENDAR, CAMERA, CONTACTS, LOCATION, MICROPHONE, PHONE, SENSORS, SMS, STORAGE,})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Permission {
     }

@@ -17,6 +17,7 @@ package cn.bertsir.zbar;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -64,7 +65,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         try {
             mCameraManager.openDriver();
         } catch (Exception e) {
-            Toast.makeText(getContext(),"摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
             return false;
         }
         mPreviewCallback.onStart();
@@ -98,7 +99,13 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
             mCameraManager.autoFocus(mFocusCallback);
         } catch (Exception e) {
             e.printStackTrace();
-
+            //如果异常延迟200ms再试
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCameraManager.autoFocus(mFocusCallback);
+                }
+            }, 200);
         }
     }
 
@@ -137,10 +144,11 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         super.onDetachedFromWindow();
     }
 
-    public void setFlash(){
+    public void setFlash() {
         mCameraManager.setFlash();
     }
-    public void setFlash(boolean open){
+
+    public void setFlash(boolean open) {
         mCameraManager.setFlash(open);
     }
 }

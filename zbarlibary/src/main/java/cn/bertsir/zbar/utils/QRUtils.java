@@ -9,7 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
+
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -407,8 +407,7 @@ public class QRUtils {
 
         private int gravity = Gravity.CENTER;
         private int maxLines = 1;
-        private @ColorInt
-        int color = Color.BLACK;
+        private int color = Color.BLACK;
         private float size;
 
         public TextViewConfig() {

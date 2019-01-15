@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_show_album;
     private CheckBox cb_only_center;
     private CheckBox cb_create_add_water;
+    private CheckBox cb_crop_image;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_show_flash = (CheckBox) findViewById(R.id.cb_show_flash);
         cb_show_album = (CheckBox) findViewById(R.id.cb_show_album);
         cb_only_center = (CheckBox) findViewById(R.id.cb_only_center);
+        cb_crop_image = (CheckBox) findViewById(R.id.cb_crop_image);
         cb_create_add_water = (CheckBox) findViewById(R.id.cb_create_add_water);
         rb_qrcode = (RadioButton) findViewById(R.id.rb_qrcode);
         rb_bcode = (RadioButton) findViewById(R.id.rb_bcode);
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setShowLight(cb_show_flash.isChecked())//显示手电筒按钮
                 .setShowTitle(cb_show_title.isChecked())//显示Title
                 .setShowAlbum(cb_show_album.isChecked())//显示从相册选择按钮
+                .setNeedCrop(cb_crop_image.isChecked())//是否从相册选择后裁剪图片
                 .setCornerColor(Color.parseColor("#E42E30"))//设置扫描框颜色
                 .setLineColor(Color.parseColor("#E42E30"))//设置扫描线颜色
                 .setLineSpeed(QrConfig.LINE_MEDIUM)//设置扫描线速度

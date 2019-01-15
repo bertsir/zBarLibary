@@ -12,6 +12,11 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-01-15
+1.新增了从相册选择图片识别时候的图片裁剪</br>
+2.修复了相机对焦时的部分问题
+
+
 ### 2018-11-15
 1.修复无闪光灯机器打开手电筒闪退的BUG(感谢 DwayneZhang)
 
@@ -85,7 +90,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.7'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.1.8'
 </pre>
 
 
@@ -125,6 +130,7 @@ android {
                 .setScanViewType(QrConfig.SCANVIEW_TYPE_QRCODE)//设置扫描框类型（二维码还是条形码，默认为二维码）
                 .setCustombarcodeformat(QrConfig.BARCODE_I25)//此项只有在扫码类型为TYPE_CUSTOM时才有效
                 .setPlaySound(true)//是否扫描成功后bi~的声音
+                .setNeedCrop(true)//从相册选择二维码之后再次截取二维码
                 .setDingPath(R.raw.test)//设置提示音(不设置为默认的Ding~)
                 .setIsOnlyCenter(true)//是否只识别框中内容(默认为全屏识别)
                 .setTitleText("扫描二维码")//设置Tilte文字
@@ -192,6 +198,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setIsOnlyCenter| Boolean | 设置是否只识别扫描框中的内容（默认为全屏扫描） |
 | setPlaySound | Boolean | 设置扫描成功后是否有提示音 |
 | setDingPath | int| 自定义提示音（举例：R.raw.test，不设置为默认的) |
+| setNeedCrop | Boolean | 从相册选择二维码之后再次手动框选二维码(默认为true) |
 
 
 ## 5.混淆

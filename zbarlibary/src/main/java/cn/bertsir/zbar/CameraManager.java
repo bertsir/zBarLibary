@@ -93,7 +93,7 @@ public final class CameraManager {
      *
      * @return {@link CameraConfiguration}.
      */
-    public cn.bertsir.zbar.CameraConfiguration getConfiguration() {
+    public CameraConfiguration getConfiguration() {
         return mConfiguration;
     }
 

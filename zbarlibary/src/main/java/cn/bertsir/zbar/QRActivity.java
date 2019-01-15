@@ -5,10 +5,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.soundcloud.android.crop.Crop;
+
+import java.io.File;
 
 import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.utils.GetPathFromUri;
@@ -40,6 +45,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private TextView tv_des;
     private QrConfig options;
     static final int REQUEST_IMAGE_GET = 1;
+    static final int REQUEST_PHOTO_CUT = 2;
+    private Uri uricropFile;
+    private String cropTempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cropQr.jpg";
 
 
     @Override
@@ -96,8 +104,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
         iv_album.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
         fl_title.setVisibility(options.isShow_title() ? View.VISIBLE : View.GONE);
         iv_flash.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
-        iv_album.setVisibility(options.isShow_album() ? View.VISIBLE :View.GONE);
-        tv_des.setVisibility(options.isShow_des() ? View.VISIBLE :View.GONE);
+        iv_album.setVisibility(options.isShow_album() ? View.VISIBLE : View.GONE);
+        tv_des.setVisibility(options.isShow_des() ? View.VISIBLE : View.GONE);
 
         tv_des.setText(options.getDes_text());
         tv_title.setText(options.getTitle_text());
@@ -113,7 +121,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private ScanCallback resultCallback = new ScanCallback() {
         @Override
         public void onScanResult(String result) {
-            if(options.isPlay_sound()){
+            if (options.isPlay_sound()) {
                 soundPool.play(1, 1, 1, 0, 0, 1);
             }
             if (cp != null) {
@@ -147,16 +155,11 @@ public class QRActivity extends Activity implements View.OnClickListener {
      * 从相册选择
      */
     private void fromAlbum() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent, 1);
-
-        if (QRUtils.getInstance().isMIUI()) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
+        if (QRUtils.getInstance().isMIUI()) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
             startActivityForResult(Intent.createChooser(intent, "选择要识别的图片"), REQUEST_IMAGE_GET);
-        } else {//直接跳到系统相册去选取视频
+        } else {//直接跳到系统相册去选取
             Intent intent = new Intent();
             if (Build.VERSION.SDK_INT < 19) {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -179,93 +182,122 @@ public class QRActivity extends Activity implements View.OnClickListener {
             if (cp != null) {
                 cp.setFlash();
             }
-        }else if(v.getId() == R.id.mo_scanner_back){
+        } else if (v.getId() == R.id.mo_scanner_back) {
             finish();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {//从相册选取视频
-            final String imagePath = GetPathFromUri.getPath(this, data.getData());
-            textDialog = showProgressDialog();
-            textDialog.setText("请稍后...");
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if(TextUtils.isEmpty(imagePath)){
-                            Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //优先使用zbar识别
-                        final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(!TextUtils.isEmpty(qrcontent)){
-                                    closeProgressDialog();
-                                    QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
-                                    finish();
-                                }else {
-                                    //尝试用zxing再试一次
-                                    final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
-                                    if(!TextUtils.isEmpty(qrcontent)){
-                                        closeProgressDialog();
-                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
-                                        finish();
-                                    }else {
-                                        Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                        closeProgressDialog();
-                                    }
-
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e("Exception", e.getMessage(), e);
-                        Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
-                        closeProgressDialog();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_IMAGE_GET:
+                    if(options.isNeed_crop()){
+                        cropPhoto(data.getData());
+                    }else {
+                        recognitionLocation(data.getData());
                     }
-                }
-            }).start();
+                    break;
+                case Crop.REQUEST_CROP:
+                    recognitionLocation(uricropFile);
+                    break;
+            }
         }
-
-//        if (resultCode == RESULT_OK) {
-//            final Uri uri = data.getData();
-//            final ContentResolver cr = this.getContentResolver();
-//
-//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
 
-    private AlertDialog progressDialog;
+    private void recognitionLocation(Uri uri) {
+        final String imagePath = GetPathFromUri.getPath(this, uri);
+        textDialog = showProgressDialog();
+        textDialog.setText("请稍后...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (TextUtils.isEmpty(imagePath)) {
+                        Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    //优先使用zbar识别
+                    final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!TextUtils.isEmpty(qrcontent)) {
+                                closeProgressDialog();
+                                QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                delete(cropTempPath);//删除裁切的临时文件
+                                finish();
+                            } else {
+                                //尝试用zxing再试一次
+                                final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
+                                if (!TextUtils.isEmpty(qrcontent)) {
+                                    closeProgressDialog();
+                                    QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                    delete(cropTempPath);//删除裁切的临时文件
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                    closeProgressDialog();
+                                }
 
-    public TextView showProgressDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
-        builder.setCancelable(false);
-        View view = View.inflate(this, R.layout.dialog_loading, null);
-        builder.setView(view);
-        ProgressBar pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
-        TextView tv_hint = (TextView) view.findViewById(R.id.tv_hint);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pb_loading.setIndeterminateTintList(ContextCompat.getColorStateList(this, R.color.dialog_pro_color));
-        }
-        progressDialog = builder.create();
-        progressDialog.show();
-
-        return tv_hint;
-    }
-
-    public void closeProgressDialog() {
-        try {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("Exception", e.getMessage(), e);
+                    Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                    closeProgressDialog();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }).start();
+    }
+
+    public void cropPhoto(Uri uri) {
+        uricropFile = Uri.parse("file://" + "/" + cropTempPath);
+        Crop.of(uri, uricropFile).asSquare().start(this);
+    }
+
+    private boolean delete(String delFile) {
+        File file = new File(delFile);
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
-}
+
+
+        private AlertDialog progressDialog;
+
+        public TextView showProgressDialog () {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder.setCancelable(false);
+            View view = View.inflate(this, R.layout.dialog_loading, null);
+            builder.setView(view);
+            ProgressBar pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
+            TextView tv_hint = (TextView) view.findViewById(R.id.tv_hint);
+            if (Build.VERSION.SDK_INT >= 23) {
+                pb_loading.setIndeterminateTintList(getColorStateList(R.color.dialog_pro_color));
+            }
+            progressDialog = builder.create();
+            progressDialog.show();
+
+            return tv_hint;
+        }
+
+        public void closeProgressDialog () {
+            try {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }

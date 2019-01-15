@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -29,7 +28,7 @@ public class LineView extends View {
         super(context);
     }
 
-    public LineView(Context context, @Nullable AttributeSet attrs) {
+    public LineView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         paint=new Paint();//创建一个画笔
