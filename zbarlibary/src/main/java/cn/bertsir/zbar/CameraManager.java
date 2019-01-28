@@ -65,7 +65,6 @@ public final class CameraManager {
                 }
             }
         }
-
     }
 
     /**
@@ -106,7 +105,13 @@ public final class CameraManager {
      */
     public void startPreview(SurfaceHolder holder, Camera.PreviewCallback previewCallback) throws IOException {
         if (mCamera != null) {
-            mCamera.setDisplayOrientation(90);
+            //解决nexus5x扫码倒立的情况
+            if(android.os.Build.MANUFACTURER.equals("LGE") &&
+                    android.os.Build.MODEL.equals("Nexus 5X")) {
+                mCamera.setDisplayOrientation(270);
+            }else {
+                mCamera.setDisplayOrientation(90);
+            }
             mCamera.setPreviewDisplay(holder);
             mCamera.setPreviewCallback(previewCallback);
             mCamera.startPreview();
