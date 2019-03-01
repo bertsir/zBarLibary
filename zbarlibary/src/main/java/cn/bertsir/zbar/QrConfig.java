@@ -30,6 +30,10 @@ public class QrConfig implements Serializable {
 
 
 
+    public boolean show_zoom = true;
+
+
+
     public boolean only_center = false;
 
 
@@ -199,6 +203,14 @@ public class QrConfig implements Serializable {
         return ding_path;
     }
 
+    public boolean isShow_zoom() {
+        return show_zoom;
+    }
+
+    public void setShow_zoom(boolean show_zoom) {
+        this.show_zoom = show_zoom;
+    }
+
 
 
     public static class Builder{
@@ -300,6 +312,12 @@ public class QrConfig implements Serializable {
             watcher.ding_path = ding;
             return this;
         }
+
+        public Builder setShowZoom(boolean zoom){
+            watcher.show_zoom = zoom;
+            return this;
+        }
+
 
         public QrConfig create(){
             return watcher;

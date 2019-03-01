@@ -11,4 +11,12 @@
             <enum name="rightTop" value="2" />
         </attr>
     </declare-styleable>
+
+
+    <declare-styleable name="VerticalSeekBar">
+        <attr name="seekBarRotation">
+            <enum name="CW90" value="90" />
+            <enum name="CW270" value="270" />
+        </attr>
+    </declare-styleable>
 </resources>

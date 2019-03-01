@@ -3,6 +3,9 @@ package cn.bertsir.zbar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -18,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.utils.GetPathFromUri;
 import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.view.ScanView;
+import cn.bertsir.zbar.view.VerticalSeekBar;
 
 public class QRActivity extends Activity implements View.OnClickListener {
 
@@ -48,6 +53,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
     static final int REQUEST_PHOTO_CUT = 2;
     private Uri uricropFile;
     private String cropTempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cropQr.jpg";
+    private VerticalSeekBar vsb_zoom;
 
 
     @Override
@@ -101,11 +107,14 @@ public class QRActivity extends Activity implements View.OnClickListener {
         fl_title = (FrameLayout) findViewById(R.id.fl_title);
         tv_des = (TextView) findViewById(R.id.tv_des);
 
+        vsb_zoom = (VerticalSeekBar) findViewById(R.id.vsb_zoom);
+
         iv_album.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
         fl_title.setVisibility(options.isShow_title() ? View.VISIBLE : View.GONE);
         iv_flash.setVisibility(options.isShow_light() ? View.VISIBLE : View.GONE);
         iv_album.setVisibility(options.isShow_album() ? View.VISIBLE : View.GONE);
         tv_des.setVisibility(options.isShow_des() ? View.VISIBLE : View.GONE);
+        vsb_zoom.setVisibility(options.isShow_zoom() ? View.VISIBLE : View.GONE);
 
         tv_des.setText(options.getDes_text());
         tv_title.setText(options.getTitle_text());
@@ -116,6 +125,34 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv.setLineSpeed(options.getLine_speed());
         sv.setLineColor(options.getLINE_COLOR());
 
+
+        setSeekBarColor(vsb_zoom,options.getCORNER_COLOR());
+        vsb_zoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                cp.setZoom((progress/100f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    public void setSeekBarColor(SeekBar seekBar, int color){
+        LayerDrawable layerDrawable = (LayerDrawable)
+                seekBar.getProgressDrawable();
+        Drawable dra=layerDrawable.getDrawable(2);
+        dra.setColorFilter(color, PorterDuff.Mode.SRC);
+        Drawable dra2=seekBar.getThumb();
+        seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        seekBar.invalidate();
     }
 
     private ScanCallback resultCallback = new ScanCallback() {

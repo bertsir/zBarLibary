@@ -189,4 +189,23 @@ public final class CameraManager {
             mCamera.setParameters(parameters);
         }
     }
+
+    /**
+     * 相机设置焦距
+     */
+    public void setCameraZoom(float ratio){
+        if(mCamera != null){
+            Camera.Parameters parameters = mCamera.getParameters();
+            if(!parameters.isZoomSupported()){
+                return;
+            }
+            int maxZoom = parameters.getMaxZoom();
+            if(maxZoom == 0){
+                return;
+            }
+            int zoom = (int) (maxZoom * ratio);
+            parameters.setZoom(zoom);
+            mCamera.setParameters(parameters);
+        }
+    }
 }
