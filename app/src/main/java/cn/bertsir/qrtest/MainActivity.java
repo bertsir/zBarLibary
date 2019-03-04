@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_create_add_water;
     private CheckBox cb_crop_image;
     private CheckBox cb_show_zoom;
+    private CheckBox cb_auto_zoom;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_crop_image = (CheckBox) findViewById(R.id.cb_crop_image);
         cb_create_add_water = (CheckBox) findViewById(R.id.cb_create_add_water);
         cb_show_zoom = (CheckBox) findViewById(R.id.cb_show_zoom);
+        cb_auto_zoom = (CheckBox) findViewById(R.id.cb_auto_zoom);
         rb_qrcode = (RadioButton) findViewById(R.id.rb_qrcode);
         rb_bcode = (RadioButton) findViewById(R.id.rb_bcode);
         rb_all = (RadioButton) findViewById(R.id.rb_all);
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setTitleBackgroudColor(Color.parseColor("#262020"))//设置状态栏颜色
                 .setTitleTextColor(Color.WHITE)//设置Title文字颜色
                 .setShowZoom(cb_show_zoom.isChecked())
+                .setAutoZoom(cb_auto_zoom.isChecked())
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override

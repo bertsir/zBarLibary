@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <dimen name="scan_frame_width">200dp</dimen>
+    
+</resources>

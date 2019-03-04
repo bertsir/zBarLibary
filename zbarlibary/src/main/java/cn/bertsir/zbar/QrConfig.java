@@ -27,22 +27,12 @@ public class QrConfig implements Serializable {
     public boolean show_album = true;
     public boolean show_des = true;
     public boolean need_crop = true;
-
-
-
-    public boolean show_zoom = true;
-
-
-
+    public boolean show_zoom = false;
+    public boolean auto_zoom = false;
     public boolean only_center = false;
-
-
-
     public boolean play_sound = true;
-
     public String title_text = "扫描二维码";
     public String des_text = "(识别二维码)";
-
     public int line_speed = LINE_FAST;
     public int corner_width = 10;
 
@@ -211,6 +201,14 @@ public class QrConfig implements Serializable {
         this.show_zoom = show_zoom;
     }
 
+    public boolean isAuto_zoom() {
+        return auto_zoom;
+    }
+
+    public void setAuto_zoom(boolean auto_zoom) {
+        this.auto_zoom = auto_zoom;
+    }
+
 
 
     public static class Builder{
@@ -315,6 +313,11 @@ public class QrConfig implements Serializable {
 
         public Builder setShowZoom(boolean zoom){
             watcher.show_zoom = zoom;
+            return this;
+        }
+
+        public Builder setAutoZoom(boolean auto){
+            watcher.auto_zoom = auto;
             return this;
         }
 

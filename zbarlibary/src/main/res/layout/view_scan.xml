@@ -35,8 +35,8 @@
 
             <FrameLayout
                 android:id="@+id/fl_scan"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/scan_frame_width"
+                android:layout_height="@dimen/scan_frame_width"
                 android:layout_gravity="center_horizontal"
                 >
 

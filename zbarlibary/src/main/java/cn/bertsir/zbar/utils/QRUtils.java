@@ -49,6 +49,7 @@ public class QRUtils {
 
     private static QRUtils instance;
     private Bitmap scanBitmap;
+    private Context mContext;
 
 
     public static QRUtils getInstance() {
@@ -56,6 +57,7 @@ public class QRUtils {
             instance = new QRUtils();
         return instance;
     }
+
 
 
     /**
@@ -514,5 +516,6 @@ public class QRUtils {
         }
         return false;
     }
+
 
 }

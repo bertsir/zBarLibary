@@ -21,6 +21,15 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.common.DetectorResult;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.datamatrix.detector.Detector;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -106,9 +115,59 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                 Symbol.cropY = size.height/2 - cropWidth/2;
 
                 barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
+
+
+                /***********Beta******/
+                if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE ){
+                    LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
+                            size.height, Symbol.cropX, Symbol.cropY, cropWidth,cropHeight, true);
+                    if (source != null) {
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                        DetectorResult detectorResult = null;
+                        try {
+                            detectorResult = new Detector(bitmap.getBlackMatrix()).detect();
+                            ResultPoint[] p = detectorResult.getPoints();
+                            //计算扫描框中的二维码的宽度，两点间距离公式
+                            float point1X = p[0].getX();
+                            float point1Y = p[0].getY();
+                            float point2X = p[1].getX();
+                            float point2Y = p[1].getY();
+                            int len =(int) Math.sqrt(Math.abs(point1X-point2X)*Math.abs(point1X-point2X)+Math.abs(point1Y-point2Y)*Math.abs(point1Y-point2Y));
+                            if(len < cropWidth/4 && len > 10){
+                                cameraZoom(camera);
+                            }
+                        } catch (NotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                /***********Beta******/
+
             }
 
             executorService.execute(mAnalysisTask);
+
+        }
+    }
+
+    /**
+     * 相机设置焦距
+     */
+    public void cameraZoom(Camera mCamera){
+        if(mCamera != null){
+            Camera.Parameters parameters = mCamera.getParameters();
+            if(!parameters.isZoomSupported()){
+                return;
+            }
+            int maxZoom = parameters.getMaxZoom();
+            if(maxZoom == 0){
+                return;
+            }
+            if(parameters.getZoom() +10 > parameters.getMaxZoom()){
+                return;
+            }
+            parameters.setZoom(parameters.getZoom()+10);
+            mCamera.setParameters(parameters);
         }
     }
 

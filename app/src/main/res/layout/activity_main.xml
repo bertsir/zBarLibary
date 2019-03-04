@@ -118,6 +118,13 @@
              android:text="开启手动缩放"
              android:checked="true"
              />
+         <CheckBox
+             android:id="@+id/cb_auto_zoom"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="开启自动缩放"
+             android:checked="true"
+             />
          <RadioGroup
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

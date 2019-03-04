@@ -63,12 +63,13 @@ public class QRActivity extends Activity implements View.OnClickListener {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
 
         Symbol.scanType = options.getScan_type();
         Symbol.scanFormat = options.getCustombarcodeformat();
         Symbol.is_only_scan_center = options.isOnly_center();
-
+        Symbol.is_auto_zoom = options.isAuto_zoom();
         setContentView(R.layout.activity_qr);
         initView();
     }

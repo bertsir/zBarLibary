@@ -147,6 +147,11 @@ public class Symbol {
      */
     public static boolean is_only_scan_center = false;
 
+    /**
+     * 是否自动拉近
+     */
+    public static boolean is_auto_zoom = false;
+
 
     /**
      * C pointer to a zbar_symbol_t.

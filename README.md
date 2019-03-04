@@ -12,6 +12,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-03-04
+1.新增自动焦距调整(实验性功能)
+
 ### 2019-03-01
 1.新增手动焦距调整
 
@@ -96,7 +99,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.0'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.1'
 </pre>
 
 
@@ -142,7 +145,8 @@ android {
                 .setTitleText("扫描二维码")//设置Tilte文字
                 .setTitleBackgroudColor(Color.BLUE)//设置状态栏颜色
                 .setTitleTextColor(Color.BLACK)//设置Title文字颜色
-                .setShowZoom(false)
+                .setShowZoom(false)//是否手动调整焦距
+                .setAutoZoom(false)//是否自动调整焦距
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -206,7 +210,8 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setPlaySound | Boolean | 设置扫描成功后是否有提示音 |
 | setDingPath | int| 自定义提示音（举例：R.raw.test，不设置为默认的) |
 | setNeedCrop | Boolean | 从相册选择二维码之后再次手动框选二维码(默认为true) |
-| setShowZoom | Boolean | 是否开启手动调整焦距(默认为true) |
+| setShowZoom | Boolean | 是否开启手动调整焦距(默认为false) |
+| setAutoZoom | Boolean | 是否开启自动调整焦距(默认为false) |
 
 ## 5.混淆
 <pre>
