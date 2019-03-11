@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -13,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -127,7 +126,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv.setLineColor(options.getLINE_COLOR());
 
 
-        setSeekBarColor(vsb_zoom,options.getCORNER_COLOR());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setSeekBarColor(vsb_zoom,options.getCORNER_COLOR());
+        }
         vsb_zoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -146,14 +147,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void setSeekBarColor(SeekBar seekBar, int color){
-        LayerDrawable layerDrawable = (LayerDrawable)
-                seekBar.getProgressDrawable();
-        Drawable dra=layerDrawable.getDrawable(2);
-        dra.setColorFilter(color, PorterDuff.Mode.SRC);
-        Drawable dra2=seekBar.getThumb();
         seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        seekBar.invalidate();
+        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
     private ScanCallback resultCallback = new ScanCallback() {

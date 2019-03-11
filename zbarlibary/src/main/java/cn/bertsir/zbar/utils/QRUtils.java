@@ -153,6 +153,37 @@ public class QRUtils {
 
     }
 
+    /**
+     * 扫描二维码图片的方法
+     * @return
+     */
+    public String decodeQRcodeByZxing(Bitmap bitmap) {
+        Hashtable<DecodeHintType, String> hints = new Hashtable();
+        hints.put(DecodeHintType.CHARACTER_SET, "UTF-8"); // 设置二维码内容的编码
+        scanBitmap =bitmap;
+        int[] data = new int[scanBitmap.getWidth() * scanBitmap.getHeight()];
+        scanBitmap.getPixels(data, 0, scanBitmap.getWidth(), 0, 0, scanBitmap.getWidth(), scanBitmap.getHeight());
+        RGBLuminanceSource rgbLuminanceSource = new RGBLuminanceSource(scanBitmap.getWidth(),scanBitmap.getHeight(),data);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new GlobalHistogramBinarizer(rgbLuminanceSource));
+        QRCodeReader reader = new QRCodeReader();
+        Result result = null;
+        try {
+            result = reader.decode(binaryBitmap, hints);
+        } catch (NotFoundException e) {
+
+        }catch (ChecksumException e){
+
+        }catch(FormatException e){
+
+        }
+        if(result == null){
+            return "";
+        }else {
+            return result.getText();
+        }
+
+    }
+
 
     /**
      * 识别本地条形码
