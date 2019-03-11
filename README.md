@@ -103,7 +103,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.2'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.3'
 </pre>
 
 
