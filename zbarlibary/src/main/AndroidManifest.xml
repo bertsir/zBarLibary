@@ -21,7 +21,7 @@
         >
         <provider
             android:name=".utils.QrFileProvider"
-            android:authorities="cn.bertsir.zbar.FileProvider"
+            android:authorities="${applicationId}.zbar.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
