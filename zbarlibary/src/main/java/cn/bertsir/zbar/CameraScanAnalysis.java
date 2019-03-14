@@ -52,6 +52,12 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
     private boolean allowAnalysis = true;
     private Image barcode;
+    private int cropWidth;
+    private int cropHeight;
+    private Camera.Size size;
+    private byte[] data;
+    private Camera camera;
+
 
     CameraScanAnalysis() {
         mImageScanner = new ImageScanner();
@@ -102,45 +108,25 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (allowAnalysis) {
             allowAnalysis = false;
+            this.data =data;
+            this.camera = camera;
 
-            Camera.Size size = camera.getParameters().getPreviewSize();
+            size = camera.getParameters().getPreviewSize();
             barcode = new Image(size.width, size.height, "Y800");
             barcode.setData(data);
 
             if(Symbol.is_only_scan_center){
-                int cropWidth = (int) (Symbol.cropWidth* (size.height /(float)Symbol.screenWidth));
-                int cropHeight = (int) (Symbol.cropHeight* (size.width /(float)Symbol.screenHeight));
+                cropWidth = (int) (Symbol.cropWidth* (size.height /(float)Symbol.screenWidth));
+                cropHeight = (int) (Symbol.cropHeight* (size.width /(float)Symbol.screenHeight));
 
-                Symbol.cropX = size.width/2 - cropHeight/2;
-                Symbol.cropY = size.height/2 - cropWidth/2;
+                Symbol.cropX = size.width/2 - cropHeight /2;
+                Symbol.cropY = size.height/2 - cropWidth /2;
 
                 barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
 
 
                 /***********Beta******/
-                if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE ){
-                    LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
-                            size.height, Symbol.cropX, Symbol.cropY, cropWidth,cropHeight, true);
-                    if (source != null) {
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                        DetectorResult detectorResult = null;
-                        try {
-                            detectorResult = new Detector(bitmap.getBlackMatrix()).detect();
-                            ResultPoint[] p = detectorResult.getPoints();
-                            //计算扫描框中的二维码的宽度，两点间距离公式
-                            float point1X = p[0].getX();
-                            float point1Y = p[0].getY();
-                            float point2X = p[1].getX();
-                            float point2Y = p[1].getY();
-                            int len =(int) Math.sqrt(Math.abs(point1X-point2X)*Math.abs(point1X-point2X)+Math.abs(point1Y-point2Y)*Math.abs(point1Y-point2Y));
-                            if(len < cropWidth/4 && len > 10){
-                                cameraZoom(camera);
-                            }
-                        } catch (NotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+
                 /***********Beta******/
 
             }
@@ -174,6 +160,33 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
     private Runnable mAnalysisTask = new Runnable() {
         @Override
         public void run() {
+
+            if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE ){
+                LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
+                        size.height, Symbol.cropX, Symbol.cropY, cropWidth,cropHeight, true);
+                if (source != null) {
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    DetectorResult detectorResult = null;
+                    try {
+                        detectorResult = new Detector(bitmap.getBlackMatrix()).detect();
+                        ResultPoint[] p = detectorResult.getPoints();
+                        //计算扫描框中的二维码的宽度，两点间距离公式
+                        float point1X = p[0].getX();
+                        float point1Y = p[0].getY();
+                        float point2X = p[1].getX();
+                        float point2Y = p[1].getY();
+                        int len =(int) Math.sqrt(Math.abs(point1X-point2X)*Math.abs(point1X-point2X)+Math.abs(point1Y-point2Y)*Math.abs(point1Y-point2Y));
+                        if(len < cropWidth/4 && len > 10){
+                            cameraZoom(camera);
+                        }
+                    } catch (NotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+
             int result = mImageScanner.scanImage(barcode);
 
             String resultStr = null;
