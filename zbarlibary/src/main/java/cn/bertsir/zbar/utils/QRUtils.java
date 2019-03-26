@@ -9,7 +9,6 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
-
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -150,7 +149,6 @@ public class QRUtils {
         }else {
             return result.getText();
         }
-
     }
 
     /**

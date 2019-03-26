@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
             public void onScanSuccess(String result) {
+                Log.e(TAG, "onScanSuccess: "+result );
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
             }
         });

@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -127,12 +126,12 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            setSeekBarColor(vsb_zoom,options.getCORNER_COLOR());
+            setSeekBarColor(vsb_zoom, options.getCORNER_COLOR());
         }
         vsb_zoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                cp.setZoom((progress/100f));
+                cp.setZoom((progress / 100f));
             }
 
             @Override
@@ -148,7 +147,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setSeekBarColor(SeekBar seekBar, int color){
+    public void setSeekBarColor(SeekBar seekBar, int color) {
         seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
@@ -227,9 +226,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_GET:
-                    if(options.isNeed_crop()){
+                    if (options.isNeed_crop()) {
                         cropPhoto(data.getData());
-                    }else {
+                    } else {
                         recognitionLocation(data.getData());
                     }
                     break;
@@ -254,34 +253,51 @@ public class QRActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    //优先使用zbar识别
-                    final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!TextUtils.isEmpty(qrcontent)) {
-                                closeProgressDialog();
-                                QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
-                                delete(cropTempPath);//删除裁切的临时文件
-                                finish();
-                            } else {
-                                //尝试用zxing再试一次
-                                final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
+                        //优先使用zbar识别一次二维码
+                        final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
                                 if (!TextUtils.isEmpty(qrcontent)) {
                                     closeProgressDialog();
                                     QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
                                     delete(cropTempPath);//删除裁切的临时文件
                                     finish();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                    closeProgressDialog();
-                                }
+                                    //尝试用zxing再试一次识别二维码
+                                    final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
+                                    if (!TextUtils.isEmpty(qrcontent)) {
+                                        closeProgressDialog();
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                        delete(cropTempPath);//删除裁切的临时文件
+                                        finish();
+                                    } else {
+                                        //再试试是不是条形码
+                                        try {
+                                             String barcontent = QRUtils.getInstance().decodeBarcode(imagePath);
+                                            if (!TextUtils.isEmpty(barcontent)) {
+                                                closeProgressDialog();
+                                                QrManager.getInstance().getResultCallback().onScanSuccess(barcontent);
+                                                delete(cropTempPath);//删除裁切的临时文件
+                                                finish();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                                closeProgressDialog();
+                                            }
+                                        } catch (Exception e) {
+                                            Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                                            closeProgressDialog();
+                                            e.printStackTrace();
+                                        }
 
+                                    }
+
+                                }
                             }
-                        }
-                    });
+                        });
+
+
                 } catch (Exception e) {
-                    Log.e("Exception", e.getMessage(), e);
                     Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
                     closeProgressDialog();
                 }
@@ -308,31 +324,31 @@ public class QRActivity extends Activity implements View.OnClickListener {
     }
 
 
-        private AlertDialog progressDialog;
+    private AlertDialog progressDialog;
 
-        public TextView showProgressDialog () {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
-            builder.setCancelable(false);
-            View view = View.inflate(this, R.layout.dialog_loading, null);
-            builder.setView(view);
-            ProgressBar pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
-            TextView tv_hint = (TextView) view.findViewById(R.id.tv_hint);
-            if (Build.VERSION.SDK_INT >= 23) {
-                pb_loading.setIndeterminateTintList(getColorStateList(R.color.dialog_pro_color));
-            }
-            progressDialog = builder.create();
-            progressDialog.show();
-
-            return tv_hint;
+    public TextView showProgressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+        builder.setCancelable(false);
+        View view = View.inflate(this, R.layout.dialog_loading, null);
+        builder.setView(view);
+        ProgressBar pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
+        TextView tv_hint = (TextView) view.findViewById(R.id.tv_hint);
+        if (Build.VERSION.SDK_INT >= 23) {
+            pb_loading.setIndeterminateTintList(getColorStateList(R.color.dialog_pro_color));
         }
+        progressDialog = builder.create();
+        progressDialog.show();
 
-        public void closeProgressDialog () {
-            try {
-                if (progressDialog != null) {
-                    progressDialog.dismiss();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        return tv_hint;
+    }
+
+    public void closeProgressDialog() {
+        try {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+}
