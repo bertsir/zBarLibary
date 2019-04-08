@@ -20,18 +20,24 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
+import java.util.List;
+
+import cn.bertsir.zbar.utils.QRUtils;
 
 /**
  * <p>Camera manager.</p>
  */
 public final class CameraManager {
+    private static final String TAG = "CameraManager";
 
     private final CameraConfiguration mConfiguration;
+    private Context context;
 
     private Camera mCamera;
 
     public CameraManager(Context context) {
-        this.mConfiguration = new cn.bertsir.zbar.CameraConfiguration(context);
+        this.context = context;
+        this.mConfiguration = new CameraConfiguration(context);
     }
 
     /**
@@ -112,11 +118,41 @@ public final class CameraManager {
             }else {
                 mCamera.setDisplayOrientation(90);
             }
+            //setNearPreviewSize(mCamera);
             mCamera.setPreviewDisplay(holder);
             mCamera.setPreviewCallback(previewCallback);
             mCamera.startPreview();
         }
     }
+
+    /**
+     * 设置最符合屏幕比例的预览分辨率
+     * @param mCamera
+     */
+    private void setNearPreviewSize(Camera mCamera){
+        int nearwidth = 0;
+        int nearheight = 0;
+        float nearratio = 10f;
+        int screenHeight = QRUtils.getInstance().getScreenHeight(context);
+        int screenWidth = QRUtils.getInstance().getScreenWidth(context);
+        float screenratio = Math.min(screenWidth,screenHeight) / (float) Math.max(screenWidth,screenHeight) ;
+        Camera.Parameters parameters = mCamera.getParameters();
+        if(parameters != null){
+            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+            for (int i = 0; i < supportedPreviewSizes.size(); i++) {
+                int width = supportedPreviewSizes.get(i).width;
+                int height = supportedPreviewSizes.get(i).height;
+                float ratio = Math.min(width,height) / (float) Math.max(width,height);
+                if(Math.abs(screenratio - ratio) < nearratio){
+                    nearratio = Math.abs(screenratio - ratio);
+                    nearwidth = width;
+                    nearheight = height;
+                }
+            }
+            mCamera.getParameters().setPreviewSize(nearwidth,nearheight);
+        }
+    }
+
 
     /**
      * Camera stop preview.
