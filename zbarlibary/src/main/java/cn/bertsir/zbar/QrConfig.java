@@ -48,14 +48,21 @@ public class QrConfig implements Serializable {
 
     public static final int SCANVIEW_TYPE_QRCODE = 1;//二维码框
     public static final int SCANVIEW_TYPE_BARCODE = 2;//条形码框
-
-
+    public static final int SCREEN_PORTRAIT = 1;//屏幕纵向
+    public static final int SCREEN_LANDSCAPE = 2;//屏幕横向
+    public static final int SCREEN_SENSOR = 3;//屏幕自动
 
 
     public int scan_type = TYPE_QRCODE;//默认只扫描二维码
     public int scan_view_type = SCANVIEW_TYPE_QRCODE;//默认为二维码扫描框
+
+
+
+
     public final static int REQUEST_CAMERA = 99;
     public final static String EXTRA_THIS_CONFIG = "extra_this_config";
+
+    public  int SCREEN_ORIENTATION = SCREEN_PORTRAIT;
 
     /**
      * EAN-8.
@@ -209,6 +216,15 @@ public class QrConfig implements Serializable {
         this.auto_zoom = auto_zoom;
     }
 
+    public int getSCREEN_ORIENTATION() {
+        return SCREEN_ORIENTATION;
+    }
+
+    public void setSCREEN_ORIENTATION(int SCREEN_ORIENTATION) {
+        this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
+    }
+
+
 
 
     public static class Builder{
@@ -318,6 +334,12 @@ public class QrConfig implements Serializable {
 
         public Builder setAutoZoom(boolean auto){
             watcher.auto_zoom = auto;
+            return this;
+        }
+
+
+        public Builder setScreenOrientation(int SCREEN_ORIENTATION) {
+            watcher.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
             return this;
         }
 

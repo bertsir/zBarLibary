@@ -11,9 +11,12 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 
 ## 更新日志
+### 2019-04-08 (1.2.9)
+1.新增屏幕方向指定API(setScreenOrientation 默认为竖屏)</br>
+注：当屏幕为横向时自动拉近距离将不可用
 
 ### 2019-04-08 (1.2.8)
-1.强制指定扫描页面为竖屏模式
+1.强制指定扫描页面为竖屏模式（废弃）
 
 ### 2019-03-26 (1.2.6)
 1.从相册选择识别支持了条形码
@@ -115,7 +118,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.8'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.2.9'
 </pre>
 
 
@@ -163,6 +166,7 @@ android {
                 .setTitleTextColor(Color.BLACK)//设置Title文字颜色
                 .setShowZoom(false)//是否手动调整焦距
                 .setAutoZoom(false)//是否自动调整焦距
+                .setScreenOrientation(QrConfig.SCREEN_PORTRAIT)//设置屏幕方向
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -218,7 +222,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setTitleTextColor | int | 设置Title文字颜色 |
 | setCornerColor | int | 设置扫描框颜色 |
 | setLineColor | int | 设置扫描线颜色 |
-| setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速<br>QrConfig.LINE_SLOW(慢速) |
+| setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速）<br>QrConfig.LINE_SLOW(慢速) |
 | setScanType | int | 设置扫描类型</br>QrConfig.TYPE_QRCODE(二维码)</br>QrConfig.TYPE_BARCODE(条形码)</br>QrConfig.TYPE_ALL(全部类型)</br>QrConfig.TYPE_CUSTOM(指定类型) |
 | setScanViewType | int | 设置扫描框类型</br>QrConfig.SCANVIEW_TYPE_QRCODE(二维码)</br>QrConfig.SCANVIEW_TYPE_BARCODE(条形码) |
 | setCustombarcodeformat| int| 设置指定扫码类型（举例：QrConfig.BARCODE_EAN13）,此项只有在ScanType设置为自定义时才生效 |
@@ -228,6 +232,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setNeedCrop | Boolean | 从相册选择二维码之后再次手动框选二维码(默认为true) |
 | setShowZoom | Boolean | 是否开启手动调整焦距(默认为false) |
 | setAutoZoom | Boolean | 是否开启自动调整焦距(默认为false) |
+| setScreenOrientation | int | 设置屏幕方向</br>QrConfig.SCREEN_PORTRAIT(纵向)</br>QrConfig.SCREEN_LANDSCAPE(横向）<br>QrConfig.SCREEN_SENSOR(传感器方向) |
 
 ## 5.混淆
 <pre>

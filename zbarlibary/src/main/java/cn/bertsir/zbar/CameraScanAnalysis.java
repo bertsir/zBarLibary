@@ -15,6 +15,7 @@
  */
 package cn.bertsir.zbar;
 
+import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,7 @@ import cn.bertsir.zbar.Qr.Image;
 import cn.bertsir.zbar.Qr.ImageScanner;
 import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.Qr.SymbolSet;
+import cn.bertsir.zbar.utils.QRUtils;
 
 /**
  */
@@ -57,9 +59,11 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
     private Camera.Size size;
     private byte[] data;
     private Camera camera;
+    private Context context;
 
 
-    CameraScanAnalysis() {
+    CameraScanAnalysis(Context context) {
+        this.context = context;
         mImageScanner = new ImageScanner();
         if (Symbol.scanType == QrConfig.TYPE_QRCODE) {
             mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
@@ -124,11 +128,6 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
                 barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
 
-
-                /***********Beta******/
-
-                /***********Beta******/
-
             }
 
             executorService.execute(mAnalysisTask);
@@ -161,7 +160,8 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
         @Override
         public void run() {
 
-            if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE ){
+            if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE
+                    && QRUtils.getInstance().isScreenOriatationPortrait(context)){
                 LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
                         size.height, Symbol.cropX, Symbol.cropY, cropWidth,cropHeight, true);
                 if (source != null) {

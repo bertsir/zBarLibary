@@ -150,6 +150,31 @@
                 />
 
          </RadioGroup>
+         <RadioGroup
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             >
+            <RadioButton
+                android:id="@+id/rb_screen_sx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="屏幕竖向"
+                />
+            <RadioButton
+                android:id="@+id/rb_screen_hx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="屏幕横向"
+                />
+            <RadioButton
+                android:id="@+id/rb_screen_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="屏幕自动"
+                />
+
+         </RadioGroup>
          <Button
              android:id="@+id/bt_scan"
              android:layout_width="match_parent"

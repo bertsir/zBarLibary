@@ -46,7 +46,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         super(context, attrs, defStyleAttr);
 
         mCameraManager = new CameraManager(context);
-        mPreviewCallback = new CameraScanAnalysis();
+        mPreviewCallback = new CameraScanAnalysis(context);
     }
 
     /**

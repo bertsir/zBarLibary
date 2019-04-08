@@ -20,7 +20,6 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
-import java.util.List;
 
 import cn.bertsir.zbar.utils.QRUtils;
 
@@ -114,42 +113,13 @@ public final class CameraManager {
             //解决nexus5x扫码倒立的情况
             if(android.os.Build.MANUFACTURER.equals("LGE") &&
                     android.os.Build.MODEL.equals("Nexus 5X")) {
-                mCamera.setDisplayOrientation(270);
+                mCamera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 270 : 180);
             }else {
-                mCamera.setDisplayOrientation(90);
+                mCamera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 90 : 0);
             }
-            //setNearPreviewSize(mCamera);
             mCamera.setPreviewDisplay(holder);
             mCamera.setPreviewCallback(previewCallback);
             mCamera.startPreview();
-        }
-    }
-
-    /**
-     * 设置最符合屏幕比例的预览分辨率
-     * @param mCamera
-     */
-    private void setNearPreviewSize(Camera mCamera){
-        int nearwidth = 0;
-        int nearheight = 0;
-        float nearratio = 10f;
-        int screenHeight = QRUtils.getInstance().getScreenHeight(context);
-        int screenWidth = QRUtils.getInstance().getScreenWidth(context);
-        float screenratio = Math.min(screenWidth,screenHeight) / (float) Math.max(screenWidth,screenHeight) ;
-        Camera.Parameters parameters = mCamera.getParameters();
-        if(parameters != null){
-            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
-            for (int i = 0; i < supportedPreviewSizes.size(); i++) {
-                int width = supportedPreviewSizes.get(i).width;
-                int height = supportedPreviewSizes.get(i).height;
-                float ratio = Math.min(width,height) / (float) Math.max(width,height);
-                if(Math.abs(screenratio - ratio) < nearratio){
-                    nearratio = Math.abs(screenratio - ratio);
-                    nearwidth = width;
-                    nearheight = height;
-                }
-            }
-            mCamera.getParameters().setPreviewSize(nearwidth,nearheight);
         }
     }
 

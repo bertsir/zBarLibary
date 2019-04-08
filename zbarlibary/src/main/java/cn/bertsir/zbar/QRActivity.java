@@ -3,6 +3,8 @@ package cn.bertsir.zbar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -63,6 +65,25 @@ public class QRActivity extends Activity implements View.OnClickListener {
         }
 
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
+
+        switch (options.getSCREEN_ORIENTATION()) {
+            case QrConfig.SCREEN_LANDSCAPE:
+                if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+                break;
+            case QrConfig.SCREEN_PORTRAIT:
+                if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+                break;
+            case QrConfig.SCREEN_SENSOR:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                break;
+            default:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+        }
 
         Symbol.scanType = options.getScan_type();
         Symbol.scanFormat = options.getCustombarcodeformat();
@@ -253,48 +274,48 @@ public class QRActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                        //优先使用zbar识别一次二维码
-                        final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                    //优先使用zbar识别一次二维码
+                    final String qrcontent = QRUtils.getInstance().decodeQRcode(imagePath);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!TextUtils.isEmpty(qrcontent)) {
+                                closeProgressDialog();
+                                QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                delete(cropTempPath);//删除裁切的临时文件
+                                finish();
+                            } else {
+                                //尝试用zxing再试一次识别二维码
+                                final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
                                 if (!TextUtils.isEmpty(qrcontent)) {
                                     closeProgressDialog();
                                     QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
                                     delete(cropTempPath);//删除裁切的临时文件
                                     finish();
                                 } else {
-                                    //尝试用zxing再试一次识别二维码
-                                    final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
-                                    if (!TextUtils.isEmpty(qrcontent)) {
-                                        closeProgressDialog();
-                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
-                                        delete(cropTempPath);//删除裁切的临时文件
-                                        finish();
-                                    } else {
-                                        //再试试是不是条形码
-                                        try {
-                                             String barcontent = QRUtils.getInstance().decodeBarcode(imagePath);
-                                            if (!TextUtils.isEmpty(barcontent)) {
-                                                closeProgressDialog();
-                                                QrManager.getInstance().getResultCallback().onScanSuccess(barcontent);
-                                                delete(cropTempPath);//删除裁切的临时文件
-                                                finish();
-                                            } else {
-                                                Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
-                                                closeProgressDialog();
-                                            }
-                                        } catch (Exception e) {
-                                            Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                                    //再试试是不是条形码
+                                    try {
+                                        String barcontent = QRUtils.getInstance().decodeBarcode(imagePath);
+                                        if (!TextUtils.isEmpty(barcontent)) {
                                             closeProgressDialog();
-                                            e.printStackTrace();
+                                            QrManager.getInstance().getResultCallback().onScanSuccess(barcontent);
+                                            delete(cropTempPath);//删除裁切的临时文件
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                            closeProgressDialog();
                                         }
-
+                                    } catch (Exception e) {
+                                        Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                                        closeProgressDialog();
+                                        e.printStackTrace();
                                     }
 
                                 }
+
                             }
-                        });
+                        }
+                    });
 
 
                 } catch (Exception e) {
@@ -351,4 +372,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         }
     }
+
+
 }

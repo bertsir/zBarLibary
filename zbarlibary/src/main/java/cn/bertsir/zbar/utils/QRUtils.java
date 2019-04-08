@@ -1,6 +1,7 @@
 package cn.bertsir.zbar.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -582,6 +583,15 @@ public class QRUtils {
             wm.getDefaultDisplay().getSize(point);
         }
         return point.y;
+    }
+
+    /**
+     * 返回当前屏幕是否为竖屏。
+     * @param context
+     * @return 当且仅当当前屏幕为竖屏时返回true,否则返回false。
+     */
+    public  boolean isScreenOriatationPortrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
 

@@ -29,7 +29,6 @@
                 android:resource="@xml/qr_file_paths"/>
         </provider>
         <activity android:name="cn.bertsir.zbar.QRActivity"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name=".utils.PermissionUtils$PermissionActivity"

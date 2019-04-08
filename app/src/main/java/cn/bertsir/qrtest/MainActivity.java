@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
+    private RadioButton rb_screen_sx;
+    private RadioButton rb_screen_hx;
+    private RadioButton rb_screen_auto;
+
 
 
     @Override
@@ -92,8 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_qrcode = (RadioButton) findViewById(R.id.rb_qrcode);
         rb_bcode = (RadioButton) findViewById(R.id.rb_bcode);
         rb_all = (RadioButton) findViewById(R.id.rb_all);
+        rb_screen_hx = (RadioButton) findViewById(R.id.rb_screen_hx);
+        rb_screen_sx = (RadioButton) findViewById(R.id.rb_screen_sx);
+        rb_screen_auto = (RadioButton) findViewById(R.id.rb_screen_auto);
 
         rb_qrcode.setChecked(true);
+        rb_screen_sx.setChecked(true);
 
     }
 
@@ -121,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void start() {
         int scan_type = 0;
         int scan_view_type = 0;
+        int screen = 1;
         if (rb_all.isChecked()) {
             scan_type = QrConfig.TYPE_ALL;
             scan_view_type = QrConfig.SCANVIEW_TYPE_QRCODE;
@@ -131,6 +140,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             scan_type = QrConfig.TYPE_BARCODE;
             scan_view_type = QrConfig.SCANVIEW_TYPE_BARCODE;
         }
+        if (rb_screen_auto.isChecked()) {
+            screen = QrConfig.SCREEN_SENSOR;
+        } else if (rb_screen_sx.isChecked()) {
+            screen = QrConfig.SCREEN_PORTRAIT;
+        } else if (rb_screen_hx.isChecked()) {
+            screen = QrConfig.SCREEN_LANDSCAPE;
+        }
+
         QrConfig qrConfig = new QrConfig.Builder()
                 .setDesText(et_qr_des.getText().toString())//扫描框下文字
                 .setShowDes(cd_show_des.isChecked())//是否显示扫描框下面文字
@@ -152,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setTitleTextColor(Color.WHITE)//设置Title文字颜色
                 .setShowZoom(cb_show_zoom.isChecked())
                 .setAutoZoom(cb_auto_zoom.isChecked())
+                .setScreenOrientation(screen)
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
