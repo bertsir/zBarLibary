@@ -89,6 +89,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
         Symbol.scanFormat = options.getCustombarcodeformat();
         Symbol.is_only_scan_center = options.isOnly_center();
         Symbol.is_auto_zoom = options.isAuto_zoom();
+        Symbol.screenWidth = QRUtils.getInstance().getScreenWidth(this);
+        Symbol.screenHeight = QRUtils.getInstance().getScreenHeight(this);
         setContentView(R.layout.activity_qr);
         initView();
     }

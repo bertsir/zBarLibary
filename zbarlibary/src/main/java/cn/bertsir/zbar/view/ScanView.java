@@ -3,7 +3,6 @@ package cn.bertsir.zbar.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -136,25 +135,8 @@ public class ScanView extends FrameLayout {
             public void run() {
                 Symbol.cropWidth = fl_scan.getWidth();
                 Symbol.cropHeight = fl_scan.getHeight();
-                Symbol.screenWidth = getScreenWidth();
-                Symbol.screenHeight = getScreenHeight();
-
             }
         });
     }
 
-    public int getScreenWidth() {
-        WindowManager wm = (WindowManager) getContext()
-                .getSystemService(Context.WINDOW_SERVICE);
-
-        int width = wm.getDefaultDisplay().getWidth();
-        return width;
-    }
-
-    public int getScreenHeight() {
-        WindowManager wm = (WindowManager) getContext()
-                .getSystemService(Context.WINDOW_SERVICE);
-        int height = wm.getDefaultDisplay().getHeight();
-        return height;
-    }
 }
