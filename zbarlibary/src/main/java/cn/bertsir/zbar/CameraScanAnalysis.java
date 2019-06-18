@@ -162,6 +162,9 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
             if(Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE
                     && QRUtils.getInstance().isScreenOriatationPortrait(context)){
+                if(Symbol.cropX == 0 || Symbol.cropY == 0 || cropWidth == 0 || cropHeight == 0){
+                    return;
+                }
                 LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
                         size.height, Symbol.cropX, Symbol.cropY, cropWidth,cropHeight, true);
                 if (source != null) {
@@ -184,8 +187,6 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                     }
                 }
             }
-
-
 
             int result = mImageScanner.scanImage(barcode);
 
