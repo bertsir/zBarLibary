@@ -1,5 +1,5 @@
 
-![](http://tu.bertsir.top/images/2018/08/16/af08f029cb75ae29714cf72d2a64c04076855dcf196f31-OFUbTs_fw658_meitu_3.jpg)
+![](http://tu.bertsir.com/images/2019/06/27/Cool-Sky_meitu_1.jpg)
 
 zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在了一起，这样二维码识别就更便捷了（包含主要功能，二维码识别生成，条形码识别生成）
 
@@ -177,7 +177,7 @@ android {
                 .setTitleTextColor(Color.BLACK)//设置Title文字颜色
                 .setShowZoom(false)//是否手动调整焦距
                 .setAutoZoom(false)//是否自动调整焦距
-                .setFingerZoom(cb_finger_zoom.isChecked())//是否开始双指缩放
+                .setFingerZoom(false)//是否开始双指缩放
                 .setScreenOrientation(QrConfig.SCREEN_PORTRAIT)//设置屏幕方向
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
