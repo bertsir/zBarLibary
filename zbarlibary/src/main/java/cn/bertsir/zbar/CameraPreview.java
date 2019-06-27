@@ -155,4 +155,8 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public void setZoom(float zoom){
         mCameraManager.setCameraZoom(zoom);
     }
+
+    public void handleZoom(boolean isZoomIn){
+        mCameraManager.handleZoom(isZoomIn);
+    }
 }

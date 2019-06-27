@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -56,6 +57,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private VerticalSeekBar vsb_zoom;
 
 
+    private float oldDist = 1f;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +72,12 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
         switch (options.getSCREEN_ORIENTATION()) {
             case QrConfig.SCREEN_LANDSCAPE:
-                if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
                 break;
             case QrConfig.SCREEN_PORTRAIT:
-                if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
                 break;
@@ -373,6 +377,30 @@ public class QRActivity extends Activity implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(options.isFinger_zoom()){
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    oldDist = QRUtils.getInstance().getFingerSpacing(event);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (event.getPointerCount() == 2) {
+                        float newDist = QRUtils.getInstance().getFingerSpacing(event);
+                        if (newDist > oldDist) {
+                            cp.handleZoom(true);
+                        } else if (newDist < oldDist) {
+                            cp.handleZoom(false);
+                        }
+                        oldDist = newDist;
+                    }
+                    break;
+            }
+        }
+        return super.onTouchEvent(event);
+
     }
 
 

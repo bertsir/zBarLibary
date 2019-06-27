@@ -12,6 +12,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-06-27 (1.3.2)
+1.支持双指缩放摄像头了（现在支持三种摄像头的缩放方式了）
+
 ### 2019-06-18 (1.3.1)
 1.修复BUG
 
@@ -126,7 +129,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.3.1'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.3.2'
 </pre>
 
 
@@ -174,6 +177,7 @@ android {
                 .setTitleTextColor(Color.BLACK)//设置Title文字颜色
                 .setShowZoom(false)//是否手动调整焦距
                 .setAutoZoom(false)//是否自动调整焦距
+                .setFingerZoom(cb_finger_zoom.isChecked())//是否开始双指缩放
                 .setScreenOrientation(QrConfig.SCREEN_PORTRAIT)//设置屏幕方向
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
@@ -240,6 +244,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setNeedCrop | Boolean | 从相册选择二维码之后再次手动框选二维码(默认为true) |
 | setShowZoom | Boolean | 是否开启手动调整焦距(默认为false) |
 | setAutoZoom | Boolean | 是否开启自动调整焦距(默认为false) |
+| setFingerZoom | Boolean | 是否开启双指调整焦距(默认为false) |
 | setScreenOrientation | int | 设置屏幕方向</br>QrConfig.SCREEN_PORTRAIT(纵向)</br>QrConfig.SCREEN_LANDSCAPE(横向）<br>QrConfig.SCREEN_SENSOR(传感器方向) |
 
 ## 5.混淆

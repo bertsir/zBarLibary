@@ -29,6 +29,7 @@ public class QrConfig implements Serializable {
     public boolean need_crop = true;
     public boolean show_zoom = false;
     public boolean auto_zoom = false;
+    public boolean finger_zoom = false;
     public boolean only_center = false;
     public boolean play_sound = true;
     public String title_text = "扫描二维码";
@@ -52,12 +53,8 @@ public class QrConfig implements Serializable {
     public static final int SCREEN_LANDSCAPE = 2;//屏幕横向
     public static final int SCREEN_SENSOR = 3;//屏幕自动
 
-
     public int scan_type = TYPE_QRCODE;//默认只扫描二维码
     public int scan_view_type = SCANVIEW_TYPE_QRCODE;//默认为二维码扫描框
-
-
-
 
     public final static int REQUEST_CAMERA = 99;
     public final static String EXTRA_THIS_CONFIG = "extra_this_config";
@@ -216,6 +213,15 @@ public class QrConfig implements Serializable {
         this.auto_zoom = auto_zoom;
     }
 
+
+    public boolean isFinger_zoom() {
+        return finger_zoom;
+    }
+
+    public void setFinger_zoom(boolean finger_zoom) {
+        this.finger_zoom = finger_zoom;
+    }
+
     public int getSCREEN_ORIENTATION() {
         return SCREEN_ORIENTATION;
     }
@@ -334,6 +340,11 @@ public class QrConfig implements Serializable {
 
         public Builder setAutoZoom(boolean auto){
             watcher.auto_zoom = auto;
+            return this;
+        }
+
+        public Builder setFingerZoom(boolean auto){
+            watcher.finger_zoom = auto;
             return this;
         }
 

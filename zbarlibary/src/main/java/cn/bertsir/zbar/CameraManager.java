@@ -17,6 +17,7 @@ package cn.bertsir.zbar;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
@@ -212,6 +213,26 @@ public final class CameraManager {
             int zoom = (int) (maxZoom * ratio);
             parameters.setZoom(zoom);
             mCamera.setParameters(parameters);
+        }
+    }
+
+
+    public void handleZoom(boolean isZoomIn) {
+        if(mCamera != null){
+            Camera.Parameters params = mCamera.getParameters();
+            if (params.isZoomSupported()) {
+                int maxZoom = params.getMaxZoom();
+                int zoom = params.getZoom();
+                if (isZoomIn && zoom < maxZoom) {
+                    zoom++;
+                } else if (zoom > 0) {
+                    zoom--;
+                }
+                params.setZoom(zoom);
+                mCamera.setParameters(params);
+            } else {
+                Log.i(TAG, "zoom not supported");
+            }
         }
     }
 }
