@@ -32,8 +32,11 @@ public class QrConfig implements Serializable {
     public boolean finger_zoom = false;
     public boolean only_center = false;
     public boolean play_sound = true;
+    public boolean double_engine = false;
+    public boolean loop_scan = false;
     public String title_text = "扫描二维码";
     public String des_text = "(识别二维码)";
+    public String open_album_text = "选择要识别的图片";
     public int line_speed = LINE_FAST;
     public int corner_width = 10;
 
@@ -173,6 +176,15 @@ public class QrConfig implements Serializable {
         return des_text;
     }
 
+
+    public String getOpen_album_text() {
+        return open_album_text;
+    }
+
+    public void setOpen_album_text(String open_album_text) {
+        this.open_album_text = open_album_text;
+    }
+
     public int getLine_speed() {
         return line_speed;
     }
@@ -230,6 +242,21 @@ public class QrConfig implements Serializable {
         this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
     }
 
+    public boolean isDouble_engine() {
+        return double_engine;
+    }
+
+    public void setDouble_engine(boolean double_engine) {
+        this.double_engine = double_engine;
+    }
+
+    public boolean isLoop_scan() {
+        return loop_scan;
+    }
+
+    public void setLoop_scan(boolean loop_scan) {
+        this.loop_scan = loop_scan;
+    }
 
 
 
@@ -354,6 +381,20 @@ public class QrConfig implements Serializable {
             return this;
         }
 
+        public Builder setDoubleEngine(boolean open) {
+            watcher.double_engine = open;
+            return this;
+        }
+
+        public Builder setOpenAlbumText(String text) {
+            watcher.open_album_text = text;
+            return this;
+        }
+
+        public Builder setLooperScan(boolean looper){
+            watcher.loop_scan = looper;
+            return this;
+        }
 
         public QrConfig create(){
             return watcher;

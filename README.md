@@ -9,8 +9,20 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
 !![微信图片_20180226114319.jpg](http://upload-images.jianshu.io/upload_images/3029020-c7c79b6af4da6960.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
 
+## Plan
+1.优化代码结构</br>
+2.优化双识别引擎</br>
+3.更换图片裁切库</br>
+
 
 ## 更新日志
+
+### 2019-07-10 (1.3.3)
+1.新增双识别引擎(zbar+zxing同时识别，建议只用在需求二维码扫描不出来的时候做尝试使用，且暂只支持对二维码有效，在开启这个功能的时候只识别框中内容将失效)</br>
+2.新增对打开相册文案的自定义</br>
+3.新增持续扫描</br>
+4.优化自动拉近功能
+
 
 ### 2019-06-27 (1.3.2)
 1.支持双指缩放摄像头了（现在支持三种摄像头的缩放方式了）
@@ -129,9 +141,9 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.3.2'
+compile 'cn.bertsir.zbarLibary:zbarlibary:1.3.3'
 </pre>
-
+注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
 
 
@@ -179,6 +191,9 @@ android {
                 .setAutoZoom(false)//是否自动调整焦距
                 .setFingerZoom(false)//是否开始双指缩放
                 .setScreenOrientation(QrConfig.SCREEN_PORTRAIT)//设置屏幕方向
+                .setDoubleEngine(false)//是否开启双引擎识别(仅对识别二维码有效，并且开启后只识别框内功能将失效)
+                .setOpenAlbumText("选择要识别的图片")//打开相册的文字
+                .setLooperScan(false)//是否连续扫描二维码
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -246,6 +261,9 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setAutoZoom | Boolean | 是否开启自动调整焦距(默认为false) |
 | setFingerZoom | Boolean | 是否开启双指调整焦距(默认为false) |
 | setScreenOrientation | int | 设置屏幕方向</br>QrConfig.SCREEN_PORTRAIT(纵向)</br>QrConfig.SCREEN_LANDSCAPE(横向）<br>QrConfig.SCREEN_SENSOR(传感器方向) |
+| setDoubleEngine | Boolean | 是否开启双识别引擎(默认为false) |
+| setLooperScan | Boolean | 是否开启连续扫描(默认为false) |
+| setOpenAlbumText | String | 设置打开相册的文字 |
 
 ## 5.混淆
 <pre>
@@ -260,9 +278,20 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 
 #### [传送门](https://www.pgyer.com/CyKm "传送门")
 
-### 快过年了，帮助到大佬们了，就打赏点呗
+### 打赏扫这里👇一分也是❤️（可以在备注中填写自己的github链接）
 
 ![](http://upload-images.jianshu.io/upload_images/3029020-8066ee3c42334a86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)    ![](http://upload-images.jianshu.io/upload_images/3029020-5d220c5715c59947.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
+
+#### 打赏历史（排名不分先后）
+
+| name | platform | price | 备注
+| ------------- |:-------------:| :-------------:|:-------------:|
+| 找不到记录的可爱大佬们 | 微信/支付宝 | -- | -- |
+| *走 | 微信 | ￥5.00 | -- |
+| Q*x | 微信 | ￥2.33 | 感谢开源zBar辛苦 |
+| *瑞波 | 支付宝 | ￥6.66 | -- |
+| *瑞波 | 支付宝 | ￥6.66 | -- |
+
 
 ## License
 <pre>

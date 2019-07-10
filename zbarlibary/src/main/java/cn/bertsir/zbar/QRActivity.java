@@ -93,6 +93,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
         Symbol.scanFormat = options.getCustombarcodeformat();
         Symbol.is_only_scan_center = options.isOnly_center();
         Symbol.is_auto_zoom = options.isAuto_zoom();
+        Symbol.doubleEngine = options.isDouble_engine();
+        Symbol.looperScan = options.isLoop_scan();
         Symbol.screenWidth = QRUtils.getInstance().getScreenWidth(this);
         Symbol.screenHeight = QRUtils.getInstance().getScreenHeight(this);
         setContentView(R.layout.activity_qr);
@@ -189,7 +191,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
                 cp.setFlash(false);
             }
             QrManager.getInstance().getResultCallback().onScanSuccess(result);
-            finish();
+            if(!Symbol.looperScan){
+                finish();
+            }
         }
     };
 
@@ -219,7 +223,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
         if (QRUtils.getInstance().isMIUI()) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-            startActivityForResult(Intent.createChooser(intent, "选择要识别的图片"), REQUEST_IMAGE_GET);
+            startActivityForResult(Intent.createChooser(intent, options.getOpen_album_text()), REQUEST_IMAGE_GET);
         } else {//直接跳到系统相册去选取
             Intent intent = new Intent();
             if (Build.VERSION.SDK_INT < 19) {
@@ -230,7 +234,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
             }
-            startActivityForResult(Intent.createChooser(intent, "选择要识别的图片"), REQUEST_IMAGE_GET);
+            startActivityForResult(Intent.createChooser(intent, options.getOpen_album_text()), REQUEST_IMAGE_GET);
         }
     }
 

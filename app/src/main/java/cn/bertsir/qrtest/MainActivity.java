@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_show_zoom;
     private CheckBox cb_auto_zoom;
     private CheckBox cb_finger_zoom;
+    private CheckBox cb_double_engine;
+    private CheckBox cb_loop_scan;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_show_zoom = (CheckBox) findViewById(R.id.cb_show_zoom);
         cb_auto_zoom = (CheckBox) findViewById(R.id.cb_auto_zoom);
         cb_finger_zoom = (CheckBox) findViewById(R.id.cb_finger_zoom);
+        cb_double_engine = (CheckBox) findViewById(R.id.cb_double_engine);
+        cb_loop_scan = (CheckBox) findViewById(R.id.cb_loop_scan);
         rb_qrcode = (RadioButton) findViewById(R.id.rb_qrcode);
         rb_bcode = (RadioButton) findViewById(R.id.rb_bcode);
         rb_all = (RadioButton) findViewById(R.id.rb_all);
@@ -172,7 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setShowZoom(cb_show_zoom.isChecked())//是否开始滑块的缩放
                 .setAutoZoom(cb_auto_zoom.isChecked())//是否开启自动缩放(实验性功能，不建议使用)
                 .setFingerZoom(cb_finger_zoom.isChecked())//是否开始双指缩放
+                .setDoubleEngine(cb_double_engine.isChecked())//是否开启双引擎识别(仅对识别二维码有效，并且开启后只识别框内功能将失效)
                 .setScreenOrientation(screen)//设置屏幕方式
+                .setOpenAlbumText("选择要识别的图片")//打开相册的文字
+                .setLooperScan(cb_loop_scan.isChecked())//是否连续扫描二维码
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
