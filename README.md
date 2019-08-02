@@ -7,7 +7,7 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ## 预览
 ![](http://upload-images.jianshu.io/upload_images/3029020-b0044075b21b2f7c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
 ![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
-!![微信图片_20180226114319.jpg](http://upload-images.jianshu.io/upload_images/3029020-c7c79b6af4da6960.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
+![WechatIMG25.png](https://upload-images.jianshu.io/upload_images/3029020-c502460466c67315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
 
 ## Plan
 1.优化代码结构</br>
