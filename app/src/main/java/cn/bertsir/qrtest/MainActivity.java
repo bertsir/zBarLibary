@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import cn.bertsir.zbar.Qr.ScanResult;
 import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.QrManager;
@@ -183,9 +184,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
-            public void onScanSuccess(String result) {
+            public void onScanSuccess(ScanResult result) {
                 Log.e(TAG, "onScanSuccess: "+result );
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "内容："+result.getContent()
+                                +"  类型："+result.getType(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -15,16 +15,17 @@
  */
 package cn.bertsir.zbar;
 
+import cn.bertsir.zbar.Qr.ScanResult;
+
 /**
  * <p>Scan results callback.</p>
  */
 public interface ScanCallback {
 
     /**
-     * Content is not empty when the callback.
+     * 扫描结果回调
      *
-     * @param content qr code content, is not null.
      */
-    void onScanResult(String content);
+    void onScanResult(ScanResult result);
 
 }

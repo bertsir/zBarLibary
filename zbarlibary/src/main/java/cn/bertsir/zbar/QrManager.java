@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cn.bertsir.zbar.Qr.ScanResult;
 import cn.bertsir.zbar.utils.PermissionConstants;
 import cn.bertsir.zbar.utils.PermissionUtils;
 
@@ -81,7 +82,7 @@ public class QrManager {
          *
          * @param result
          */
-        void onScanSuccess(String result);
+        void onScanSuccess(ScanResult result);
 
     }
 }

@@ -30,6 +30,7 @@ import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 
+import cn.bertsir.zbar.Qr.ScanResult;
 import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.utils.GetPathFromUri;
 import cn.bertsir.zbar.utils.QRUtils;
@@ -183,7 +184,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
     private ScanCallback resultCallback = new ScanCallback() {
         @Override
-        public void onScanResult(String result) {
+        public void onScanResult(ScanResult result) {
             if (options.isPlay_sound()) {
                 soundPool.play(1, 1, 1, 0, 0, 1);
             }
@@ -291,7 +292,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
                         public void run() {
                             if (!TextUtils.isEmpty(qrcontent)) {
                                 closeProgressDialog();
-                                QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                ScanResult scanResult = new ScanResult();
+                                scanResult.setContent(qrcontent);
+                                scanResult.setType(ScanResult.CODE_QR);
+                                QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
                                 delete(cropTempPath);//删除裁切的临时文件
                                 finish();
                             } else {
@@ -299,7 +303,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                 final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
                                 if (!TextUtils.isEmpty(qrcontent)) {
                                     closeProgressDialog();
-                                    QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                    ScanResult scanResult = new ScanResult();
+                                    scanResult.setContent(qrcontent);
+                                    scanResult.setType(ScanResult.CODE_QR);
+                                    QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
                                     delete(cropTempPath);//删除裁切的临时文件
                                     finish();
                                 } else {
@@ -308,7 +315,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                         String barcontent = QRUtils.getInstance().decodeBarcode(imagePath);
                                         if (!TextUtils.isEmpty(barcontent)) {
                                             closeProgressDialog();
-                                            QrManager.getInstance().getResultCallback().onScanSuccess(barcontent);
+                                            ScanResult scanResult = new ScanResult();
+                                            scanResult.setContent(barcontent);
+                                            scanResult.setType(ScanResult.CODE_BAR);
+                                            QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
                                             delete(cropTempPath);//删除裁切的临时文件
                                             finish();
                                         } else {

@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
@@ -46,6 +47,7 @@ import java.util.concurrent.Executors;
 import cn.bertsir.zbar.Qr.Config;
 import cn.bertsir.zbar.Qr.Image;
 import cn.bertsir.zbar.Qr.ImageScanner;
+import cn.bertsir.zbar.Qr.ScanResult;
 import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.Qr.SymbolSet;
 import cn.bertsir.zbar.utils.QRUtils;
@@ -102,7 +104,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                if (mCallback != null) mCallback.onScanResult((String) msg.obj);
+                if (mCallback != null) mCallback.onScanResult((ScanResult) msg.obj);
             }
         };
     }
@@ -205,15 +207,22 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
             int result = mImageScanner.scanImage(barcode);
 
             String resultStr = null;
+            int resultType = -1;
             if (result != 0) {
                 SymbolSet symSet = mImageScanner.getResults();
-                for (Symbol sym : symSet)
+                for (Symbol sym : symSet){
                     resultStr = sym.getData();
+                    resultType= sym.getType();
+                }
+
             }
 
             if (!TextUtils.isEmpty(resultStr)) {
+                ScanResult scanResult = new ScanResult();
+                scanResult.setContent(resultStr);
+                scanResult.setType(resultType == Symbol.QRCODE ? ScanResult.CODE_QR : ScanResult.CODE_BAR);
                 Message message = mHandler.obtainMessage();
-                message.obj = resultStr;
+                message.obj = scanResult;
                 message.sendToTarget();
                 if (Symbol.looperScan) {
                     allowAnalysis = true;
@@ -262,9 +271,13 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
             try {
                 rawResult = multiFormatReader.decodeWithState(bitmap);
                 String resultStr = rawResult.toString();
+                BarcodeFormat resultFormat = rawResult.getBarcodeFormat();
                 if (!TextUtils.isEmpty(resultStr)) {
+                    ScanResult scanResult = new ScanResult();
+                    scanResult.setContent(resultStr);
+                    scanResult.setType(resultFormat == BarcodeFormat.QR_CODE ? ScanResult.CODE_QR : ScanResult.CODE_BAR);
                     Message message = mHandler.obtainMessage();
-                    message.obj = resultStr;
+                    message.obj = scanResult;
                     message.sendToTarget();
                     if (Symbol.looperScan) {
                         allowAnalysis = true;

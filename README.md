@@ -18,6 +18,12 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+
+### 2019-08-19 (1.3.4)
+1.<font color=red>修改识别结果返回类型，由String变为ScanResult</font>(包含码的内容和码的类型，后期可能还会拓展)
+
+
+
 ### 2019-07-10 (1.3.3)
 1.新增双识别引擎(zbar+zxing同时识别，建议只用在需求二维码扫描不出来的时候做尝试使用，且暂只支持对二维码有效，在开启这个功能的时候只识别框中内容将失效)</br>
 2.新增对打开相册文案的自定义</br>
@@ -196,10 +202,12 @@ android {
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(false)//是否连续扫描二维码
                 .create();
-        QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
+   QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
-            public void onScanSuccess(String result) {
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            public void onScanSuccess(ScanResult result) {
+                Log.e(TAG, "onScanSuccess: "+result );
+                Toast.makeText(getApplicationContext(), "内容："+result.getContent()
+                                +"  类型："+result.getType(), Toast.LENGTH_SHORT).show();
             }
         });
 </pre>
