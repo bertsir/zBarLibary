@@ -56,8 +56,9 @@ public class QRUtils {
 
 
     public static QRUtils getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new QRUtils();
+        }
         return instance;
     }
 
@@ -129,8 +130,9 @@ public class QRUtils {
         scanBitmap = BitmapFactory.decodeFile(path,options);
         options.inJustDecodeBounds = false;
         int sampleSize = (int) (options.outHeight / (float) 200);
-        if (sampleSize <= 0)
+        if (sampleSize <= 0) {
             sampleSize = 1;
+        }
         options.inSampleSize = sampleSize;
         scanBitmap = BitmapFactory.decodeFile(path, options);
         int[] data = new int[scanBitmap.getWidth() * scanBitmap.getHeight()];
@@ -193,7 +195,7 @@ public class QRUtils {
      * @param url
      * @return
      */
-    public String decodeBarcode(String url) throws Exception {
+    public String decodeBarcode(String url)  {
         Bitmap qrbmp = BitmapFactory.decodeFile(url);
         if (qrbmp != null) {
             return decodeBarcode(qrbmp);
@@ -203,7 +205,7 @@ public class QRUtils {
 
     }
 
-    public String decodeBarcode(ImageView iv) throws Exception {
+    public String decodeBarcode(ImageView iv) {
         Bitmap qrbmp = ((BitmapDrawable) (iv).getDrawable()).getBitmap();
         if (qrbmp != null) {
             return decodeBarcode(qrbmp);
@@ -212,7 +214,7 @@ public class QRUtils {
         }
     }
 
-    public String decodeBarcode(Bitmap barcodeBmp) throws Exception {
+    public String decodeBarcode(Bitmap barcodeBmp) {
         int width = barcodeBmp.getWidth();
         int height = barcodeBmp.getHeight();
         int[] pixels = new int[width * height];
@@ -226,7 +228,6 @@ public class QRUtils {
         reader.setConfig(Symbol.EAN13, Config.ENABLE, 1);
         reader.setConfig(Symbol.EAN8, Config.ENABLE, 1);
         reader.setConfig(Symbol.UPCA, Config.ENABLE, 1);
-        reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
         reader.setConfig(Symbol.UPCE, Config.ENABLE, 1);
         int result = reader.scanImage(barcode.convert("Y800"));
         String qrCodeString = null;
