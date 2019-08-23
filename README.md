@@ -300,6 +300,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | Q*x | 微信 | ￥2.33 | 感谢开源zBar辛苦 |
 | *瑞波 | 支付宝 | ￥6.66 | -- |
 | *瑞波 | 支付宝 | ￥6.66 | -- |
+| *世东 | 支付宝 | ￥6.60 | 感谢 |
 
 
 ## License
