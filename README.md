@@ -144,11 +144,11 @@ GitHub下载库，使用File -> new -> Import Module方式
 #### 方式二（不需要修改布局）：
 最新版本（推荐）：
 <pre>
- compile 'cn.bertsir.zbarLibary:zbarlibary:latest.release'
+ implementation 'cn.bertsir.zbarLibary:zbarlibary:latest.release'
 </pre>
 指定版本：
 <pre>
-compile 'cn.bertsir.zbarLibary:zbarlibary:1.3.3'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.3'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -301,6 +301,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | *瑞波 | 支付宝 | ￥6.66 | -- |
 | *瑞波 | 支付宝 | ￥6.66 | -- |
 | *世东 | 支付宝 | ￥6.60 | 感谢 |
+| *天 | 微信 | ￥5.00 | -- |
 
 
 ## License
