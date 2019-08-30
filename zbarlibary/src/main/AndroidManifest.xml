@@ -29,6 +29,7 @@
                 android:resource="@xml/qr_file_paths"/>
         </provider>
         <activity android:name="cn.bertsir.zbar.QRActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
             android:name=".utils.PermissionUtils$PermissionActivity"

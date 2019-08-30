@@ -39,6 +39,7 @@ public class QrConfig implements Serializable {
     public String open_album_text = "选择要识别的图片";
     public int line_speed = LINE_FAST;
     public int corner_width = 10;
+    public int loop_wait_time = 0;
 
 
     public static  int ding_path = R.raw.qrcode;//默认声音
@@ -258,6 +259,13 @@ public class QrConfig implements Serializable {
         this.loop_scan = loop_scan;
     }
 
+    public int getLoop_wait_time() {
+        return loop_wait_time;
+    }
+
+    public void setLoop_wait_time(int loop_wait_time) {
+        this.loop_wait_time = loop_wait_time;
+    }
 
 
     public static class Builder{
@@ -393,6 +401,11 @@ public class QrConfig implements Serializable {
 
         public Builder setLooperScan(boolean looper){
             watcher.loop_scan = looper;
+            return this;
+        }
+
+        public Builder setLooperWaitTime(int time){
+            watcher.loop_wait_time = time;
             return this;
         }
 

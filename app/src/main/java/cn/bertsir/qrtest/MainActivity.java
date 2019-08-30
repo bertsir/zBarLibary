@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_screen_sx;
     private RadioButton rb_screen_hx;
     private RadioButton rb_screen_auto;
-
+    private EditText et_loop_scan_time;
 
 
     @Override
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_screen_hx = (RadioButton) findViewById(R.id.rb_screen_hx);
         rb_screen_sx = (RadioButton) findViewById(R.id.rb_screen_sx);
         rb_screen_auto = (RadioButton) findViewById(R.id.rb_screen_auto);
+        et_loop_scan_time = (EditText) findViewById(R.id.et_loop_scan_time);
 
         rb_qrcode.setChecked(true);
         rb_screen_sx.setChecked(true);
@@ -181,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setScreenOrientation(screen)//设置屏幕方式
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(cb_loop_scan.isChecked())//是否连续扫描二维码
+                .setLooperWaitTime(Integer.parseInt(et_loop_scan_time.getText().toString())*1000)//连续扫描间隔时间
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override

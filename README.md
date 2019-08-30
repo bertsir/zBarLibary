@@ -19,6 +19,11 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 ## 更新日志
 
 
+### 2019-08-30 (1.3.5)
+1.新增了连续扫描时间间隔的设置（setLooperWaitTime）</br>
+2.优化了屏幕旋转重建Activity的问题
+
+
 ### 2019-08-19 (1.3.4)
 1.<font color=red>修改识别结果返回类型，由String变为ScanResult</font>(包含码的内容和码的类型，后期可能还会拓展)
 
@@ -148,7 +153,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.3'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.5'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -201,6 +206,7 @@ android {
                 .setDoubleEngine(false)//是否开启双引擎识别(仅对识别二维码有效，并且开启后只识别框内功能将失效)
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(false)//是否连续扫描二维码
+                .setLooperWaitTime(5*1000)//连续扫描间隔时间
                 .create();
    QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -273,6 +279,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setDoubleEngine | Boolean | 是否开启双识别引擎(默认为false) |
 | setLooperScan | Boolean | 是否开启连续扫描(默认为false) |
 | setOpenAlbumText | String | 设置打开相册的文字 |
+| setLooperWaitTime | int | 设置连续扫描间隔时间，单位毫秒（默认为0） |
 
 ## 5.混淆
 <pre>

@@ -166,6 +166,12 @@ public class Symbol {
 
 
     /**
+     * 持续扫描间隔时间
+     */
+    public static int looperWaitTime = 0;
+
+
+    /**
      * C pointer to a zbar_symbol_t.
      */
     private long peer;

@@ -148,6 +148,28 @@
               android:checked="false"
               />
 
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="连续扫描间隔时间："
+                android:textColor="@android:color/black"
+                />
+            <EditText
+                android:id="@+id/et_loop_scan_time"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="5"
+                android:gravity="center_horizontal"
+                />
+
+         </LinearLayout>
+
          <RadioGroup
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

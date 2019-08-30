@@ -96,6 +96,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
         Symbol.is_auto_zoom = options.isAuto_zoom();
         Symbol.doubleEngine = options.isDouble_engine();
         Symbol.looperScan = options.isLoop_scan();
+        Symbol.looperWaitTime = options.getLoop_wait_time();
         Symbol.screenWidth = QRUtils.getInstance().getScreenWidth(this);
         Symbol.screenHeight = QRUtils.getInstance().getScreenHeight(this);
         setContentView(R.layout.activity_qr);
@@ -417,5 +418,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
 }

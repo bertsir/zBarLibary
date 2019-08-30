@@ -71,6 +71,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
     private byte[] data;
     private Camera camera;
     private Context context;
+    private long lastResultTime = 0;
 
     private MultiFormatReader multiFormatReader = new MultiFormatReader();
 
@@ -142,6 +143,11 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
                 barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
 
+            }
+
+            if(Symbol.looperScan  &&  (System.currentTimeMillis() - lastResultTime < Symbol.looperWaitTime)){
+                allowAnalysis = true;
+                return;
             }
 
             executorService.execute(mAnalysisTask);
@@ -224,6 +230,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                 Message message = mHandler.obtainMessage();
                 message.obj = scanResult;
                 message.sendToTarget();
+                lastResultTime = System.currentTimeMillis();
                 if (Symbol.looperScan) {
                     allowAnalysis = true;
                 }
@@ -279,6 +286,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                     Message message = mHandler.obtainMessage();
                     message.obj = scanResult;
                     message.sendToTarget();
+                    lastResultTime = System.currentTimeMillis();
                     if (Symbol.looperScan) {
                         allowAnalysis = true;
                     }
