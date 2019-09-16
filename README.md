@@ -5,9 +5,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 
 ## 预览
-![](http://upload-images.jianshu.io/upload_images/3029020-b0044075b21b2f7c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
-![](http://upload-images.jianshu.io/upload_images/3029020-6d39c71ef24deaee.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/363)
-![WechatIMG25.png](https://upload-images.jianshu.io/upload_images/3029020-c502460466c67315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
+![try8b-prgwd.gif](https://upload-images.jianshu.io/upload_images/3029020-49812952c5a9ab5b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
+![fdvtz-jgjsx.gif](https://upload-images.jianshu.io/upload_images/3029020-467d1968c57fcbfa.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
+![WechatIMG25.png](https://upload-images.jianshu.io/upload_images/3029020-e04bb39b1aae23dd.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/360)
 
 ## Plan
 1.优化代码结构</br>
@@ -17,6 +17,10 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 
 ## 更新日志
+
+### 2019-09-16 (1.3.6)
+1.新增扫描动画样式(共4种了，市面上常见的应该都有)</br>
+魔改自：[Android-自定义View实现二维码网格扫描+纵向雷达的扫描效果](https://blog.csdn.net/M075097/article/details/78533141)
 
 
 ### 2019-08-30 (1.3.5)
@@ -153,7 +157,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.5'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.6'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -207,6 +211,7 @@ android {
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(false)//是否连续扫描二维码
                 .setLooperWaitTime(5*1000)//连续扫描间隔时间
+                .setScanLineStyle(ScanLineView.style_radar)//扫描动画样式
                 .create();
    QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -264,7 +269,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setTitleTextColor | int | 设置Title文字颜色 |
 | setCornerColor | int | 设置扫描框颜色 |
 | setLineColor | int | 设置扫描线颜色 |
-| setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速）<br>QrConfig.LINE_SLOW(慢速) |
+| setLineSpeed | int | 设置扫描线速度</br>QrConfig.LINE_FAST(快速)</br>QrConfig.LINE_MEDIUM(中速）<br>QrConfig.LINE_SLOW(慢速) <br>也可以自定义时间(单位毫秒)|
 | setScanType | int | 设置扫描类型</br>QrConfig.TYPE_QRCODE(二维码)</br>QrConfig.TYPE_BARCODE(条形码)</br>QrConfig.TYPE_ALL(全部类型)</br>QrConfig.TYPE_CUSTOM(指定类型) |
 | setScanViewType | int | 设置扫描框类型</br>QrConfig.SCANVIEW_TYPE_QRCODE(二维码)</br>QrConfig.SCANVIEW_TYPE_BARCODE(条形码) |
 | setCustombarcodeformat| int| 设置指定扫码类型（举例：QrConfig.BARCODE_EAN13）,此项只有在ScanType设置为自定义时才生效 |
@@ -280,11 +285,23 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setLooperScan | Boolean | 是否开启连续扫描(默认为false) |
 | setOpenAlbumText | String | 设置打开相册的文字 |
 | setLooperWaitTime | int | 设置连续扫描间隔时间，单位毫秒（默认为0） |
+| setScanLineStyle | int | 设置扫描动画样式</br>ScanLineView.style_radar(雷达)</br>ScanLineView.style_gridding(网格）<br>ScanLineView.style_hybrid(网格+雷达) <br>ScanLineView.style_line(线条)（默认为雷达） |
 
 ## 5.混淆
 <pre>
 -keep class cn.bertsir.zbar.Qr.** { *; }
+
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
 </pre>
+
+## 6.依赖引用
+<pre>
+compile 'com.google.zxing:core:3.3.0'//zxing
+compile 'com.github.yalantis:ucrop:2.2.3'//图片裁切
+</pre>
+
 
 #### 二维码也就这些需求吧，这么简单就可以搞定了，识别速度是zxing的很多倍！方便了你的话可不可以给个Start，如遇BUG请Issues
 

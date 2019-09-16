@@ -78,12 +78,10 @@
                     />
 
 
-                <cn.bertsir.zbar.view.LineView
+                <cn.bertsir.zbar.view.ScanLineView
                     android:id="@+id/iv_scan_line"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
+                    android:layout_height="match_parent"
                     />
 
             </FrameLayout>

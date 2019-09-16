@@ -53,6 +53,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private QrConfig options;
     static final int REQUEST_IMAGE_GET = 1;
     static final int REQUEST_PHOTO_CUT = 2;
+    public static final int RESULT_CANCELED = 401;
     private Uri uricropFile;
     private String cropTempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cropQr.jpg";
     private VerticalSeekBar vsb_zoom;
@@ -111,7 +112,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
             cp.setScanCallback(resultCallback);
             cp.start();
         }
-        sv.onResume();
     }
 
     private void initView() {
@@ -122,7 +122,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
         sv = (ScanView) findViewById(R.id.sv);
         sv.setType(options.getScan_view_type());
-        sv.startScan();
 
         mo_scanner_back = (ImageView) findViewById(R.id.mo_scanner_back);
         mo_scanner_back.setOnClickListener(this);
@@ -154,6 +153,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
         sv.setCornerColor(options.getCORNER_COLOR());
         sv.setLineSpeed(options.getLine_speed());
         sv.setLineColor(options.getLINE_COLOR());
+        sv.setScanLineStyle(options.getLine_style());
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -215,7 +215,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
         if (cp != null) {
             cp.stop();
         }
-        sv.onPause();
     }
 
     /**
@@ -250,6 +249,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                 cp.setFlash();
             }
         } else if (v.getId() == R.id.mo_scanner_back) {
+            setResult(RESULT_CANCELED);//兼容混合开发
             finish();
         }
     }

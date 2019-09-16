@@ -17,6 +17,7 @@ import static android.R.attr.width;
  * Created by Bert on 2017/9/22.
  */
 
+@Deprecated
 public class LineView extends View {
 
     private Paint paint;//声明画笔

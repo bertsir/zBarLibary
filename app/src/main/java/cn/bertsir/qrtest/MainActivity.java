@@ -15,9 +15,10 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import cn.bertsir.zbar.Qr.ScanResult;
-import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.QrManager;
+import cn.bertsir.zbar.utils.QRUtils;
+import cn.bertsir.zbar.view.ScanLineView;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -50,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_screen_hx;
     private RadioButton rb_screen_auto;
     private EditText et_loop_scan_time;
+    private RadioButton rb_scanline_radar;
+    private RadioButton rb_scanline_grid;
+    private RadioButton rb_scanline_hybrid;
+    private RadioButton rb_scanline_line;
 
 
     @Override
@@ -111,6 +116,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_qrcode.setChecked(true);
         rb_screen_sx.setChecked(true);
 
+        rb_scanline_radar = (RadioButton) findViewById(R.id.rb_scanline_radar);
+        rb_scanline_radar.setOnClickListener(this);
+        rb_scanline_grid = (RadioButton) findViewById(R.id.rb_scanline_grid);
+        rb_scanline_grid.setOnClickListener(this);
+        rb_scanline_hybrid = (RadioButton) findViewById(R.id.rb_scanline_hybrid);
+        rb_scanline_hybrid.setOnClickListener(this);
+        rb_scanline_line = (RadioButton) findViewById(R.id.rb_scanline_line);
+        rb_scanline_line.setOnClickListener(this);
     }
 
     @Override
@@ -138,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int scan_type = 0;
         int scan_view_type = 0;
         int screen = 1;
+        int line_style = ScanLineView.style_radar;
         if (rb_all.isChecked()) {
             scan_type = QrConfig.TYPE_ALL;
             scan_view_type = QrConfig.SCANVIEW_TYPE_QRCODE;
@@ -155,6 +169,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (rb_screen_hx.isChecked()) {
             screen = QrConfig.SCREEN_LANDSCAPE;
         }
+
+        if(rb_scanline_radar.isChecked()){
+            line_style = ScanLineView.style_radar;
+        }else if(rb_scanline_grid.isChecked()){
+            line_style = ScanLineView.style_gridding;
+        }else if(rb_scanline_hybrid.isChecked()){
+            line_style = ScanLineView.style_hybrid;
+        }else if(rb_scanline_line.isChecked()){
+            line_style = ScanLineView.style_line;
+        }
+
+
 
         QrConfig qrConfig = new QrConfig.Builder()
                 .setDesText(et_qr_des.getText().toString())//扫描框下文字
@@ -182,14 +208,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setScreenOrientation(screen)//设置屏幕方式
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(cb_loop_scan.isChecked())//是否连续扫描二维码
-                .setLooperWaitTime(Integer.parseInt(et_loop_scan_time.getText().toString())*1000)//连续扫描间隔时间
+                .setLooperWaitTime(Integer.parseInt(et_loop_scan_time.getText().toString()) * 1000)//连续扫描间隔时间
+                .setScanLineStyle(line_style)
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
             public void onScanSuccess(ScanResult result) {
-                Log.e(TAG, "onScanSuccess: "+result );
-                Toast.makeText(getApplicationContext(), "内容："+result.getContent()
-                                +"  类型："+result.getType(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onScanSuccess: " + result);
+                Toast.makeText(getApplicationContext(), "内容：" + result.getContent()
+                        + "  类型：" + result.getType(), Toast.LENGTH_SHORT).show();
             }
         });
     }

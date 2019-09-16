@@ -220,6 +220,42 @@
                 />
 
          </RadioGroup>
+
+
+         <RadioGroup
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             >
+            <RadioButton
+                android:id="@+id/rb_scanline_radar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="雷达"
+                android:checked="true"
+                />
+            <RadioButton
+                android:id="@+id/rb_scanline_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网格"
+                />
+            <RadioButton
+                android:id="@+id/rb_scanline_hybrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="雷达+网格"
+                />
+            <RadioButton
+                android:id="@+id/rb_scanline_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="线"
+                />
+
+         </RadioGroup>
+
+
          <Button
              android:id="@+id/bt_scan"
              android:layout_width="match_parent"

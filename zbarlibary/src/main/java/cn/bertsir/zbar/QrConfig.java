@@ -4,6 +4,8 @@ import android.graphics.Color;
 
 import java.io.Serializable;
 
+import cn.bertsir.zbar.view.ScanLineView;
+
 /**
  * Created by Bert on 2017/9/22.
  */
@@ -12,8 +14,8 @@ public class QrConfig implements Serializable {
 
 
     public static final int LINE_FAST = 1000;
-    public static final int LINE_MEDIUM = 3000;
-    public static final int LINE_SLOW = 5000;
+    public static final int LINE_MEDIUM = 2000;
+    public static final int LINE_SLOW = 3000;
 
 
     public  int CORNER_COLOR = Color.parseColor("#ff5f00");
@@ -38,6 +40,7 @@ public class QrConfig implements Serializable {
     public String des_text = "(识别二维码)";
     public String open_album_text = "选择要识别的图片";
     public int line_speed = LINE_FAST;
+    public int line_style = ScanLineView.style_hybrid;
     public int corner_width = 10;
     public int loop_wait_time = 0;
 
@@ -189,6 +192,16 @@ public class QrConfig implements Serializable {
     public int getLine_speed() {
         return line_speed;
     }
+
+
+    public int getLine_style() {
+        return line_style;
+    }
+
+    public void setLine_style(int line_style) {
+        this.line_style = line_style;
+    }
+
 
     public int getCorner_width() {
         return corner_width;
@@ -406,6 +419,11 @@ public class QrConfig implements Serializable {
 
         public Builder setLooperWaitTime(int time){
             watcher.loop_wait_time = time;
+            return this;
+        }
+
+        public Builder setScanLineStyle(int style){
+            watcher.line_style = style;
             return this;
         }
 
