@@ -290,16 +290,12 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 ## 5.混淆
 <pre>
 -keep class cn.bertsir.zbar.Qr.** { *; }
-
--dontwarn com.yalantis.ucrop**
--keep class com.yalantis.ucrop** { *; }
--keep interface com.yalantis.ucrop** { *; }
 </pre>
 
 ## 6.依赖引用
 <pre>
 compile 'com.google.zxing:core:3.3.0'//zxing
-compile 'com.github.yalantis:ucrop:2.2.3'//图片裁切
+compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 </pre>
 
 
