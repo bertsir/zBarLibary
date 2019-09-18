@@ -6,7 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
@@ -67,13 +70,13 @@ public class QRUtils {
     /**
      * 识别本地二维码
      *
-     * @param url
+     * @param path
      * @return
      */
-    public String decodeQRcode(String url) throws Exception {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap qrbmp = BitmapFactory.decodeFile(url,options);
+    public String decodeQRcode(String path) throws Exception {
+        //对图片进行灰度处理，为了兼容彩色二维码
+        Bitmap qrbmp = compressImage(path);
+        qrbmp = toGrayscale(qrbmp);
         if (qrbmp != null) {
             return decodeQRcode(qrbmp);
         } else {
@@ -109,8 +112,10 @@ public class QRUtils {
                 qrCodeString = sym.getData();
             }
         }
+        barcodeBmp.recycle();
         return qrCodeString;
     }
+
 
 
     /**
@@ -125,16 +130,7 @@ public class QRUtils {
         }
         Hashtable<DecodeHintType, String> hints = new Hashtable();
         hints.put(DecodeHintType.CHARACTER_SET, "UTF-8"); // 设置二维码内容的编码
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true; // 先获取原大小
-        scanBitmap = BitmapFactory.decodeFile(path,options);
-        options.inJustDecodeBounds = false;
-        int sampleSize = (int) (options.outHeight / (float) 200);
-        if (sampleSize <= 0) {
-            sampleSize = 1;
-        }
-        options.inSampleSize = sampleSize;
-        scanBitmap = BitmapFactory.decodeFile(path, options);
+        Bitmap scanBitmap = compressImage(path);
         int[] data = new int[scanBitmap.getWidth() * scanBitmap.getHeight()];
         scanBitmap.getPixels(data, 0, scanBitmap.getWidth(), 0, 0, scanBitmap.getWidth(), scanBitmap.getHeight());
         RGBLuminanceSource rgbLuminanceSource = new RGBLuminanceSource(scanBitmap.getWidth(),scanBitmap.getHeight(),data);
@@ -601,6 +597,51 @@ public class QRUtils {
         float y = event.getY(0) - event.getY(1);
         return (float) Math.sqrt(x * x + y * y);
     }
+
+
+
+    /**
+     * 对bitmap进行灰度处理
+     * @param bmpOriginal
+     * @return
+     */
+    private Bitmap toGrayscale(Bitmap bmpOriginal) {
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmpGrayscale;
+    }
+
+    /**
+     * 压缩图片
+     * @param path
+     * @return
+     */
+    private Bitmap compressImage(String path){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // 先获取原大小
+        scanBitmap = BitmapFactory.decodeFile(path,options);
+        options.inJustDecodeBounds = false;
+        int sampleSizeH = (int) (options.outHeight / (float) 800);
+        int sampleSizeW = (int) (options.outWidth / (float) 800);
+        int sampleSize = Math.max(sampleSizeH,sampleSizeW);
+        if (sampleSize <= 0) {
+            sampleSize = 1;
+        }
+        options.inSampleSize = sampleSize;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap qrbmp = BitmapFactory.decodeFile(path,options);
+        return qrbmp;
+    }
+
 
 
 }

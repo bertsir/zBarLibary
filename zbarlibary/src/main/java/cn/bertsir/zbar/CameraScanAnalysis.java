@@ -135,14 +135,18 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
             barcode.setData(data);
 
             if (Symbol.is_only_scan_center) {
+                //用于框中的自动拉伸和对识别数据的裁剪
                 cropWidth = (int) (Symbol.cropWidth * (size.height / (float) Symbol.screenWidth));
                 cropHeight = (int) (Symbol.cropHeight * (size.width / (float) Symbol.screenHeight));
-
                 Symbol.cropX = size.width / 2 - cropHeight / 2;
                 Symbol.cropY = size.height / 2 - cropWidth / 2;
-
                 barcode.setCrop(Symbol.cropX, Symbol.cropY, cropHeight, cropWidth);
-
+            }else {
+                //用于全屏幕的自动拉升
+                Symbol.cropX =0;
+                Symbol.cropY = 0;
+                cropWidth = size.width;
+                cropHeight = size.height;
             }
 
             if(Symbol.looperScan  &&  (System.currentTimeMillis() - lastResultTime < Symbol.looperWaitTime)){
@@ -182,9 +186,13 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
             if (Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE
                     && QRUtils.getInstance().isScreenOriatationPortrait(context)) {
-                if (Symbol.cropX == 0 || Symbol.cropY == 0 || cropWidth == 0 || cropHeight == 0) {
-                    return;
+
+                if(Symbol.is_only_scan_center){
+                    if (Symbol.cropX == 0 || Symbol.cropY == 0 || cropWidth == 0 || cropHeight == 0) {
+                        return;
+                    }
                 }
+
                 LuminanceSource source = new PlanarYUVLuminanceSource(data, size.width,
                         size.height, Symbol.cropX, Symbol.cropY, cropWidth, cropHeight, true);
                 if (source != null) {
@@ -200,7 +208,8 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                         float point2X = p[1].getX();
                         float point2Y = p[1].getY();
                         int len = (int) Math.sqrt(Math.abs(point1X - point2X) * Math.abs(point1X - point2X) + Math.abs(point1Y - point2Y) * Math.abs(point1Y - point2Y));
-                        if (len < cropWidth / 4 && len > 10) {
+                        int minZoomLen = 10;
+                        if (len < cropWidth / 4 && len > minZoomLen) {
                             cameraZoom(camera);
                         }
 

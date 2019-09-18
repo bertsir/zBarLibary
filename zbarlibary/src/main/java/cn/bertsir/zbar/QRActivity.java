@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -69,7 +70,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
+        Log.i("zBarLibary", "version:1.3.7  buildDate:2019年09月18日 ");
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
 
         switch (options.getSCREEN_ORIENTATION()) {
@@ -291,9 +292,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ScanResult scanResult = new ScanResult();
                             if (!TextUtils.isEmpty(qrcontent)) {
                                 closeProgressDialog();
-                                ScanResult scanResult = new ScanResult();
                                 scanResult.setContent(qrcontent);
                                 scanResult.setType(ScanResult.CODE_QR);
                                 QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
@@ -304,7 +305,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                 final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
                                 if (!TextUtils.isEmpty(qrcontent)) {
                                     closeProgressDialog();
-                                    ScanResult scanResult = new ScanResult();
                                     scanResult.setContent(qrcontent);
                                     scanResult.setType(ScanResult.CODE_QR);
                                     QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
@@ -316,7 +316,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                         String barcontent = QRUtils.getInstance().decodeBarcode(imagePath);
                                         if (!TextUtils.isEmpty(barcontent)) {
                                             closeProgressDialog();
-                                            ScanResult scanResult = new ScanResult();
                                             scanResult.setContent(barcontent);
                                             scanResult.setType(ScanResult.CODE_BAR);
                                             QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
