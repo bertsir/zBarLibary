@@ -7,8 +7,8 @@ android {
         applicationId "cn.bertsir.qrtest"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 22
-        versionName "5.0"
+        versionCode 23
+        versionName "5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi-v7a"  // 指定要ndk需要兼容的架构(这样其他依赖包里mips,x86,armeabi,arm-v8之类的so会被过滤掉)
@@ -25,5 +25,5 @@ android {
 dependencies {
     implementation 'com.android.support:appcompat-v7:26.0.0'
     compile project(':zbarlibary')
-    //implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.6'
+    //implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.7'
 }

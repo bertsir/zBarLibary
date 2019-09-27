@@ -147,6 +147,13 @@
               android:text="连续扫描"
               android:checked="false"
               />
+         <CheckBox
+             android:id="@+id/cb_auto_light"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="自动灯光"
+             android:checked="false"
+             />
 
          <LinearLayout
              android:layout_width="match_parent"

@@ -39,6 +39,7 @@ import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.File;
 import java.util.Hashtable;
 
 import cn.bertsir.zbar.Qr.Config;
@@ -641,6 +642,21 @@ public class QRUtils {
         Bitmap qrbmp = BitmapFactory.decodeFile(path,options);
         return qrbmp;
     }
+
+
+    public boolean deleteTempFile(String delFile) {
+        File file = new File(delFile);
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
 
 
 

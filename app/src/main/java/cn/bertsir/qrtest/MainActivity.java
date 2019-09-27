@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_finger_zoom;
     private CheckBox cb_double_engine;
     private CheckBox cb_loop_scan;
+    private CheckBox cb_auto_light;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_scanline_line;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         bt_scan = (Button) findViewById(R.id.bt_scan);
-
         bt_scan.setOnClickListener(this);
         iv_qr = (ImageView) findViewById(R.id.iv_qr);
         iv_qr.setOnClickListener(this);
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_scanline_hybrid.setOnClickListener(this);
         rb_scanline_line = (RadioButton) findViewById(R.id.rb_scanline_line);
         rb_scanline_line.setOnClickListener(this);
+        cb_auto_light = (CheckBox) findViewById(R.id.cb_auto_light);
+        cb_auto_light.setOnClickListener(this);
     }
 
     @Override
@@ -170,16 +173,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             screen = QrConfig.SCREEN_LANDSCAPE;
         }
 
-        if(rb_scanline_radar.isChecked()){
+        if (rb_scanline_radar.isChecked()) {
             line_style = ScanLineView.style_radar;
-        }else if(rb_scanline_grid.isChecked()){
+        } else if (rb_scanline_grid.isChecked()) {
             line_style = ScanLineView.style_gridding;
-        }else if(rb_scanline_hybrid.isChecked()){
+        } else if (rb_scanline_hybrid.isChecked()) {
             line_style = ScanLineView.style_hybrid;
-        }else if(rb_scanline_line.isChecked()){
+        } else if (rb_scanline_line.isChecked()) {
             line_style = ScanLineView.style_line;
         }
-
 
 
         QrConfig qrConfig = new QrConfig.Builder()
@@ -209,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setOpenAlbumText("选择要识别的图片")//打开相册的文字
                 .setLooperScan(cb_loop_scan.isChecked())//是否连续扫描二维码
                 .setLooperWaitTime(Integer.parseInt(et_loop_scan_time.getText().toString()) * 1000)//连续扫描间隔时间
-                .setScanLineStyle(line_style)
+                .setScanLineStyle(line_style)//扫描线样式
+                .setAutoLight(cb_auto_light.isChecked())//自动灯光
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override

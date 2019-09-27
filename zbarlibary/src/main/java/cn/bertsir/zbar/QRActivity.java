@@ -2,10 +2,15 @@ package cn.bertsir.zbar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -38,7 +43,7 @@ import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.view.ScanView;
 import cn.bertsir.zbar.view.VerticalSeekBar;
 
-public class QRActivity extends Activity implements View.OnClickListener {
+public class QRActivity extends Activity implements View.OnClickListener, SensorEventListener {
 
     private CameraPreview cp;
     private SoundPool soundPool;
@@ -55,12 +60,16 @@ public class QRActivity extends Activity implements View.OnClickListener {
     static final int REQUEST_IMAGE_GET = 1;
     static final int REQUEST_PHOTO_CUT = 2;
     public static final int RESULT_CANCELED = 401;
+    public final float AUTOLIGHTMIN = 10F;
     private Uri uricropFile;
     private String cropTempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cropQr.jpg";
     private VerticalSeekBar vsb_zoom;
-
-
+    private AlertDialog progressDialog;
     private float oldDist = 1f;
+
+    //用于检测光线
+    private SensorManager sensorManager;
+    private Sensor sensor;
 
 
     @Override
@@ -70,9 +79,17 @@ public class QRActivity extends Activity implements View.OnClickListener {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version:1.3.7  buildDate:2019年09月18日 ");
+        Log.i("zBarLibary", "version:1.3.8  buildDate:2019年09月27日 ");
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
+        initParm();
+        setContentView(R.layout.activity_qr);
+        initView();
+    }
 
+    /**
+     * 初始化参数
+     */
+    private void initParm(){
         switch (options.getSCREEN_ORIENTATION()) {
             case QrConfig.SCREEN_LANDSCAPE:
                 if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -91,7 +108,6 @@ public class QRActivity extends Activity implements View.OnClickListener {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 break;
         }
-
         Symbol.scanType = options.getScan_type();
         Symbol.scanFormat = options.getCustombarcodeformat();
         Symbol.is_only_scan_center = options.isOnly_center();
@@ -101,20 +117,14 @@ public class QRActivity extends Activity implements View.OnClickListener {
         Symbol.looperWaitTime = options.getLoop_wait_time();
         Symbol.screenWidth = QRUtils.getInstance().getScreenWidth(this);
         Symbol.screenHeight = QRUtils.getInstance().getScreenHeight(this);
-        setContentView(R.layout.activity_qr);
-        initView();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (cp != null) {
-            cp.setScanCallback(resultCallback);
-            cp.start();
+        if(options.isAuto_light()){
+            getSensorManager();
         }
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         cp = (CameraPreview) findViewById(R.id.cp);
         //bi~
@@ -178,12 +188,27 @@ public class QRActivity extends Activity implements View.OnClickListener {
         });
     }
 
+
+    /**
+     * 获取光线传感器
+     */
+    public void getSensorManager() {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if(sensorManager != null){
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        }
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void setSeekBarColor(SeekBar seekBar, int color) {
         seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
+    /**
+     * 识别结果回调
+     */
     private ScanCallback resultCallback = new ScanCallback() {
         @Override
         public void onScanResult(ScanResult result) {
@@ -201,6 +226,54 @@ public class QRActivity extends Activity implements View.OnClickListener {
     };
 
     @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_album) {
+            fromAlbum();
+        } else if (v.getId() == R.id.iv_flash) {
+            if (cp != null) {
+                cp.setFlash();
+            }
+        } else if (v.getId() == R.id.mo_scanner_back) {
+            setResult(RESULT_CANCELED);//兼容混合开发
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (cp != null) {
+            cp.setScanCallback(resultCallback);
+            cp.start();
+        }
+
+        if(sensorManager != null){
+            //一般在Resume方法中注册
+            /**
+             * 第三个参数决定传感器信息更新速度
+             * SensorManager.SENSOR_DELAY_NORMAL:一般
+             * SENSOR_DELAY_FASTEST:最快
+             * SENSOR_DELAY_GAME:比较快,适合游戏
+             * SENSOR_DELAY_UI:慢
+             */
+            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (cp != null) {
+            cp.stop();
+        }
+        if(sensorManager != null){
+            //解除注册
+            sensorManager.unregisterListener(this,sensor);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (cp != null) {
@@ -210,12 +283,24 @@ public class QRActivity extends Activity implements View.OnClickListener {
         soundPool.release();
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (cp != null) {
-            cp.stop();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_IMAGE_GET:
+                    if (options.isNeed_crop()) {
+                        cropPhoto(data.getData());
+                    } else {
+                        recognitionLocation(data.getData());
+                    }
+                    break;
+                case Crop.REQUEST_CROP:
+                    recognitionLocation(uricropFile);
+                    break;
+            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -240,41 +325,10 @@ public class QRActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.iv_album) {
-            fromAlbum();
-        } else if (v.getId() == R.id.iv_flash) {
-            if (cp != null) {
-                cp.setFlash();
-            }
-        } else if (v.getId() == R.id.mo_scanner_back) {
-            setResult(RESULT_CANCELED);//兼容混合开发
-            finish();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_IMAGE_GET:
-                    if (options.isNeed_crop()) {
-                        cropPhoto(data.getData());
-                    } else {
-                        recognitionLocation(data.getData());
-                    }
-                    break;
-                case Crop.REQUEST_CROP:
-                    recognitionLocation(uricropFile);
-                    break;
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
+    /**
+     * 识别本地
+     * @param uri
+     */
     private void recognitionLocation(Uri uri) {
         final String imagePath = GetPathFromUri.getPath(this, uri);
         textDialog = showProgressDialog();
@@ -298,7 +352,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                 scanResult.setContent(qrcontent);
                                 scanResult.setType(ScanResult.CODE_QR);
                                 QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
-                                delete(cropTempPath);//删除裁切的临时文件
+                                QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
                                 finish();
                             } else {
                                 //尝试用zxing再试一次识别二维码
@@ -308,7 +362,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                     scanResult.setContent(qrcontent);
                                     scanResult.setType(ScanResult.CODE_QR);
                                     QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
-                                    delete(cropTempPath);//删除裁切的临时文件
+                                    QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
                                     finish();
                                 } else {
                                     //再试试是不是条形码
@@ -319,7 +373,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                             scanResult.setContent(barcontent);
                                             scanResult.setType(ScanResult.CODE_BAR);
                                             QrManager.getInstance().getResultCallback().onScanSuccess(scanResult);
-                                            delete(cropTempPath);//删除裁切的临时文件
+                                            QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
                                             finish();
                                         } else {
                                             Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
@@ -346,26 +400,15 @@ public class QRActivity extends Activity implements View.OnClickListener {
         }).start();
     }
 
+    /**
+     * 裁切照片
+     * @param uri
+     */
     public void cropPhoto(Uri uri) {
         uricropFile = Uri.parse("file://" + "/" + cropTempPath);
         Crop.of(uri, uricropFile).asSquare().start(this);
     }
 
-    private boolean delete(String delFile) {
-        File file = new File(delFile);
-        if (file.exists() && file.isFile()) {
-            if (file.delete()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-
-    private AlertDialog progressDialog;
 
     public TextView showProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
@@ -419,8 +462,26 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
 
     @Override
+    public void onSensorChanged(SensorEvent event) {
+        float light = event.values[0];
+        if(light < AUTOLIGHTMIN){//暂定值
+            if(cp.isPreviewStart()){
+                cp.setFlash(true);
+                sensorManager.unregisterListener(this,sensor);
+                sensor = null;
+                sensorManager = null;
+            }
+        }
+    }
+
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }

@@ -45,8 +45,11 @@ public class QrConfig implements Serializable {
     public int loop_wait_time = 0;
 
 
-    public static  int ding_path = R.raw.qrcode;//默认声音
 
+    public boolean auto_light = false;
+
+
+    public static  int ding_path = R.raw.qrcode;//默认声音
     public int custombarcodeformat = -1;
 
     public static final int TYPE_QRCODE = 1;//扫描二维码
@@ -127,7 +130,6 @@ public class QrConfig implements Serializable {
     public static final int BARCODE_CODE128 = 128;
 
 
-
     public int getScan_type() {
         return scan_type;
     }
@@ -180,28 +182,17 @@ public class QrConfig implements Serializable {
         return des_text;
     }
 
-
     public String getOpen_album_text() {
         return open_album_text;
-    }
-
-    public void setOpen_album_text(String open_album_text) {
-        this.open_album_text = open_album_text;
     }
 
     public int getLine_speed() {
         return line_speed;
     }
 
-
     public int getLine_style() {
         return line_style;
     }
-
-    public void setLine_style(int line_style) {
-        this.line_style = line_style;
-    }
-
 
     public int getCorner_width() {
         return corner_width;
@@ -227,59 +218,33 @@ public class QrConfig implements Serializable {
         return show_zoom;
     }
 
-    public void setShow_zoom(boolean show_zoom) {
-        this.show_zoom = show_zoom;
-    }
-
     public boolean isAuto_zoom() {
         return auto_zoom;
     }
 
-    public void setAuto_zoom(boolean auto_zoom) {
-        this.auto_zoom = auto_zoom;
-    }
-
-
     public boolean isFinger_zoom() {
         return finger_zoom;
-    }
-
-    public void setFinger_zoom(boolean finger_zoom) {
-        this.finger_zoom = finger_zoom;
     }
 
     public int getSCREEN_ORIENTATION() {
         return SCREEN_ORIENTATION;
     }
 
-    public void setSCREEN_ORIENTATION(int SCREEN_ORIENTATION) {
-        this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
-    }
-
     public boolean isDouble_engine() {
         return double_engine;
-    }
-
-    public void setDouble_engine(boolean double_engine) {
-        this.double_engine = double_engine;
     }
 
     public boolean isLoop_scan() {
         return loop_scan;
     }
 
-    public void setLoop_scan(boolean loop_scan) {
-        this.loop_scan = loop_scan;
-    }
-
     public int getLoop_wait_time() {
         return loop_wait_time;
     }
 
-    public void setLoop_wait_time(int loop_wait_time) {
-        this.loop_wait_time = loop_wait_time;
+    public boolean isAuto_light() {
+        return auto_light;
     }
-
 
     public static class Builder{
         private QrConfig watcher;
@@ -424,6 +389,11 @@ public class QrConfig implements Serializable {
 
         public Builder setScanLineStyle(int style){
             watcher.line_style = style;
+            return this;
+        }
+
+        public Builder setAutoLight(boolean light){
+            watcher.auto_light = light;
             return this;
         }
 

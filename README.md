@@ -19,6 +19,10 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-09-27 (1.3.8)
+1.新增自动灯光（开启扫描后，若光线不足，自动打开闪光灯）
+
+
 ### 2019-09-18 (1.3.7)
 1.修复BUG [#81](https://github.com/bertsir/zBarLibary/issues/81)</br>
 2.优化彩色二维码的本地识别[#84](https://github.com/bertsir/zBarLibary/issues/84)</br>
@@ -165,7 +169,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.6'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.8'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -220,6 +224,7 @@ android {
                 .setLooperScan(false)//是否连续扫描二维码
                 .setLooperWaitTime(5*1000)//连续扫描间隔时间
                 .setScanLineStyle(ScanLineView.style_radar)//扫描动画样式
+                .setAutoLight(false)//自动灯光
                 .create();
    QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -294,6 +299,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setOpenAlbumText | String | 设置打开相册的文字 |
 | setLooperWaitTime | int | 设置连续扫描间隔时间，单位毫秒（默认为0） |
 | setScanLineStyle | int | 设置扫描动画样式</br>ScanLineView.style_radar(雷达)</br>ScanLineView.style_gridding(网格）<br>ScanLineView.style_hybrid(网格+雷达) <br>ScanLineView.style_line(线条)（默认为雷达） |
+| setAutoLight | Boolean | 是否开启自动灯光(默认为false)|
 
 ## 5.混淆
 <pre>
@@ -302,7 +308,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 
 ## 6.依赖引用
 <pre>
-compile 'com.google.zxing:core:3.3.0'//zxing
+compile 'com.google.zxing:core:3.4.0'//zxing
 compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 </pre>
 
@@ -331,6 +337,7 @@ compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 | *世东 | 支付宝 | ￥6.60 | 感谢 |
 | *天 | 微信 | ￥5.00 | -- |
 | *洪兵 | 支付宝 | ￥5.00 | -- |
+| *德明 | 支付宝 | ￥6.66 | 感谢开源扫码库 |
 
 
 ## License
