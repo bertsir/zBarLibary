@@ -14,6 +14,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -657,6 +658,12 @@ public class QRUtils {
         }
     }
 
+    //震动提醒
+    public void getVibrator(Context mContext){
+        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 50, 0, 0};
+        vibrator.vibrate(pattern, -1);
+    }
 
 
 

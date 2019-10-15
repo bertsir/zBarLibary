@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_double_engine;
     private CheckBox cb_loop_scan;
     private CheckBox cb_auto_light;
+    private CheckBox cb_have_vibrator;
     private RadioButton rb_qrcode;
     private RadioButton rb_bcode;
     private RadioButton rb_all;
@@ -126,7 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_scanline_line = (RadioButton) findViewById(R.id.rb_scanline_line);
         rb_scanline_line.setOnClickListener(this);
         cb_auto_light = (CheckBox) findViewById(R.id.cb_auto_light);
-        cb_auto_light.setOnClickListener(this);
+        cb_have_vibrator = (CheckBox) findViewById(R.id.cb_have_vibrator);
+
     }
 
     @Override
@@ -213,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setLooperWaitTime(Integer.parseInt(et_loop_scan_time.getText().toString()) * 1000)//连续扫描间隔时间
                 .setScanLineStyle(line_style)//扫描线样式
                 .setAutoLight(cb_auto_light.isChecked())//自动灯光
+                .setShowVibrator(cb_have_vibrator.isChecked())//是否震动提醒
                 .create();
         QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override

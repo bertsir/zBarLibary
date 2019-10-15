@@ -36,6 +36,7 @@ public class QrConfig implements Serializable {
     public boolean play_sound = true;
     public boolean double_engine = false;
     public boolean loop_scan = false;
+    public boolean show_vibrator = false;
     public String title_text = "扫描二维码";
     public String des_text = "(识别二维码)";
     public String open_album_text = "选择要识别的图片";
@@ -246,6 +247,11 @@ public class QrConfig implements Serializable {
         return auto_light;
     }
 
+
+    public boolean isShow_vibrator() {
+        return show_vibrator;
+    }
+
     public static class Builder{
         private QrConfig watcher;
 
@@ -394,6 +400,11 @@ public class QrConfig implements Serializable {
 
         public Builder setAutoLight(boolean light){
             watcher.auto_light = light;
+            return this;
+        }
+
+        public Builder setShowVibrator(boolean vibrator){
+            watcher.show_vibrator = vibrator;
             return this;
         }
 

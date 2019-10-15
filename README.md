@@ -19,6 +19,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-10-15 (1.3.9)
+1.新增识别成功震动提醒
+
 ### 2019-09-27 (1.3.8)
 1.新增自动灯光（开启扫描后，若光线不足，自动打开闪光灯）
 
@@ -169,7 +172,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.8'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.3.9'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -225,6 +228,7 @@ android {
                 .setLooperWaitTime(5*1000)//连续扫描间隔时间
                 .setScanLineStyle(ScanLineView.style_radar)//扫描动画样式
                 .setAutoLight(false)//自动灯光
+                .setShowVibrator(false)//是否震动提醒
                 .create();
    QrManager.getInstance().init(qrConfig).startScan(MainActivity.this, new QrManager.OnScanResultCallback() {
             @Override
@@ -300,6 +304,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setLooperWaitTime | int | 设置连续扫描间隔时间，单位毫秒（默认为0） |
 | setScanLineStyle | int | 设置扫描动画样式</br>ScanLineView.style_radar(雷达)</br>ScanLineView.style_gridding(网格）<br>ScanLineView.style_hybrid(网格+雷达) <br>ScanLineView.style_line(线条)（默认为雷达） |
 | setAutoLight | Boolean | 是否开启自动灯光(默认为false)|
+| setShowVibrator | Boolean | 是否开启震动提醒(默认为false)|
 
 ## 5.混淆
 <pre>

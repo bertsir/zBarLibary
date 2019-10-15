@@ -79,7 +79,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version:1.3.8  buildDate:2019年09月27日 ");
+        Log.i("zBarLibary", "version:1.3.9  buildDate:2019年10月15日 ");
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
         initParm();
         setContentView(R.layout.activity_qr);
@@ -215,6 +215,10 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             if (options.isPlay_sound()) {
                 soundPool.play(1, 1, 1, 0, 0, 1);
             }
+            if(options.isShow_vibrator()){
+                QRUtils.getInstance().getVibrator(getApplicationContext());
+            }
+
             if (cp != null) {
                 cp.setFlash(false);
             }
