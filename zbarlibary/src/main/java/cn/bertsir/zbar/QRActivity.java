@@ -79,7 +79,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version:1.3.9  buildDate:2019年10月15日 ");
+        Log.i("zBarLibary", "version:1.4.0  buildDate:2019年10月16日 ");
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
         initParm();
         setContentView(R.layout.activity_qr);
@@ -89,17 +89,13 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
     /**
      * 初始化参数
      */
-    private void initParm(){
+    private void initParm() {
         switch (options.getSCREEN_ORIENTATION()) {
             case QrConfig.SCREEN_LANDSCAPE:
-                if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 break;
             case QrConfig.SCREEN_PORTRAIT:
-                if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 break;
             case QrConfig.SCREEN_SENSOR:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -117,7 +113,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
         Symbol.looperWaitTime = options.getLoop_wait_time();
         Symbol.screenWidth = QRUtils.getInstance().getScreenWidth(this);
         Symbol.screenHeight = QRUtils.getInstance().getScreenHeight(this);
-        if(options.isAuto_light()){
+        if (options.isAuto_light()) {
             getSensorManager();
         }
     }
@@ -194,7 +190,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
      */
     public void getSensorManager() {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if(sensorManager != null){
+        if (sensorManager != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         }
     }
@@ -215,7 +211,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             if (options.isPlay_sound()) {
                 soundPool.play(1, 1, 1, 0, 0, 1);
             }
-            if(options.isShow_vibrator()){
+            if (options.isShow_vibrator()) {
                 QRUtils.getInstance().getVibrator(getApplicationContext());
             }
 
@@ -223,7 +219,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
                 cp.setFlash(false);
             }
             QrManager.getInstance().getResultCallback().onScanSuccess(result);
-            if(!Symbol.looperScan){
+            if (!Symbol.looperScan) {
                 finish();
             }
         }
@@ -251,7 +247,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             cp.start();
         }
 
-        if(sensorManager != null){
+        if (sensorManager != null) {
             //一般在Resume方法中注册
             /**
              * 第三个参数决定传感器信息更新速度
@@ -260,7 +256,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
              * SENSOR_DELAY_GAME:比较快,适合游戏
              * SENSOR_DELAY_UI:慢
              */
-            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
     }
@@ -271,9 +267,9 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
         if (cp != null) {
             cp.stop();
         }
-        if(sensorManager != null){
+        if (sensorManager != null) {
             //解除注册
-            sensorManager.unregisterListener(this,sensor);
+            sensorManager.unregisterListener(this, sensor);
         }
     }
 
@@ -331,6 +327,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
 
     /**
      * 识别本地
+     *
      * @param uri
      */
     private void recognitionLocation(Uri uri) {
@@ -406,6 +403,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
 
     /**
      * 裁切照片
+     *
      * @param uri
      */
     public void cropPhoto(Uri uri) {
@@ -442,7 +440,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(options.isFinger_zoom()){
+        if (options.isFinger_zoom()) {
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_POINTER_DOWN:
                     oldDist = QRUtils.getInstance().getFingerSpacing(event);
@@ -468,10 +466,10 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
     @Override
     public void onSensorChanged(SensorEvent event) {
         float light = event.values[0];
-        if(light < AUTOLIGHTMIN){//暂定值
-            if(cp.isPreviewStart()){
+        if (light < AUTOLIGHTMIN) {//暂定值
+            if (cp.isPreviewStart()) {
                 cp.setFlash(true);
-                sensorManager.unregisterListener(this,sensor);
+                sensorManager.unregisterListener(this, sensor);
                 sensor = null;
                 sensorManager = null;
             }
