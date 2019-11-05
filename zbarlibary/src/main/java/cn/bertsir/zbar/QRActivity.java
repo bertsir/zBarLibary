@@ -79,7 +79,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version:1.4.0  buildDate:2019年10月16日 ");
+        Log.i("zBarLibary", "version:1.4.1  buildDate:2019年11月05日 ");
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
         initParm();
         setContentView(R.layout.activity_qr);
@@ -132,12 +132,16 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
 
         mo_scanner_back = (ImageView) findViewById(R.id.mo_scanner_back);
         mo_scanner_back.setOnClickListener(this);
+        mo_scanner_back.setImageResource(options.getBackImgRes());
 
         iv_flash = (ImageView) findViewById(R.id.iv_flash);
         iv_flash.setOnClickListener(this);
+        iv_flash.setImageResource(options.getLightImageRes());
+
 
         iv_album = (ImageView) findViewById(R.id.iv_album);
         iv_album.setOnClickListener(this);
+        iv_album.setImageResource(options.getAblumImageRes());
 
         tv_title = (TextView) findViewById(R.id.tv_title);
         fl_title = (FrameLayout) findViewById(R.id.fl_title);

@@ -1,6 +1,7 @@
 package cn.bertsir.zbar;
 
 import android.graphics.Color;
+import android.support.annotation.DrawableRes;
 
 import java.io.Serializable;
 
@@ -44,6 +45,10 @@ public class QrConfig implements Serializable {
     public int line_style = ScanLineView.style_hybrid;
     public int corner_width = 10;
     public int loop_wait_time = 0;
+
+    public int back_img_res = R.drawable.scanner_back_img;
+    public int falsh_img_res = R.drawable.scanner_light;
+    public int album_img_res = R.drawable.scanner_album;
 
 
 
@@ -252,6 +257,13 @@ public class QrConfig implements Serializable {
         return show_vibrator;
     }
 
+    public int getBackImgRes(){ return back_img_res; }
+
+    public int getLightImageRes(){return falsh_img_res;}
+
+    public int getAblumImageRes(){ return album_img_res;}
+
+
     public static class Builder{
         private QrConfig watcher;
 
@@ -405,6 +417,21 @@ public class QrConfig implements Serializable {
 
         public Builder setShowVibrator(boolean vibrator){
             watcher.show_vibrator = vibrator;
+            return this;
+        }
+
+        public Builder setBackImageRes(@DrawableRes int res){
+            watcher.back_img_res = res;
+            return this;
+        }
+
+        public Builder setLightImageRes(@DrawableRes int res){
+            watcher.falsh_img_res = res;
+            return this;
+        }
+
+        public Builder setAblumImageRes(@DrawableRes int res){
+            watcher.album_img_res = res;
             return this;
         }
 

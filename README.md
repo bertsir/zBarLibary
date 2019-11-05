@@ -19,6 +19,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-11-05 (1.4.1)
+1.新增自定义图标的api(setBackImageRes/setLightImageRes/setAblumImageRes)
+
 ### 2019-10-16 (1.4.0)
 1.修复指定屏幕方向无效的BUG
 
@@ -175,7 +178,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.4.0'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.4.1'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -308,6 +311,9 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 | setScanLineStyle | int | 设置扫描动画样式</br>ScanLineView.style_radar(雷达)</br>ScanLineView.style_gridding(网格）<br>ScanLineView.style_hybrid(网格+雷达) <br>ScanLineView.style_line(线条)（默认为雷达） |
 | setAutoLight | Boolean | 是否开启自动灯光(默认为false)|
 | setShowVibrator | Boolean | 是否开启震动提醒(默认为false)|
+| setBackImageRes | int | 设置title返回图标，不设置为默认|
+| setLightImageRes | int | 设置闪光灯图标，不设置为默认|
+| setAblumImageRes | int | 设置相册图标，不设置为默认|
 
 ## 5.混淆
 <pre>
