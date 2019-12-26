@@ -19,6 +19,9 @@ zbar扫描快，zxing可以生成和识别本地，So,我就把他们结合在�
 
 ## 更新日志
 
+### 2019-12-26 (1.4.2)
+1.降低zXing版本到3.3.0
+
 ### 2019-11-05 (1.4.1)
 1.新增自定义图标的api(setBackImageRes/setLightImageRes/setAblumImageRes)
 
@@ -178,7 +181,7 @@ GitHub下载库，使用File -> new -> Import Module方式
 </pre>
 指定版本：
 <pre>
-implementation 'cn.bertsir.zbarLibary:zbarlibary:1.4.1'
+implementation 'cn.bertsir.zbarLibary:zbarlibary:1.4.2'
 </pre>
 注意：如果不需要尝鲜后续功能，并且保持现有稳定，建议使用指定版本号
 
@@ -322,7 +325,7 @@ String s = QRUtils.getInstance().decodeBarcode(iv_qr);
 
 ## 6.依赖引用
 <pre>
-compile 'com.google.zxing:core:3.4.0'//zxing
+compile 'com.google.zxing:core:3.3.0'//zxing
 compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 </pre>
 
@@ -331,9 +334,9 @@ compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 
 
 ### DEMO
-![](https://www.pgyer.com/app/qrcode/CyKm)
+![](http://apk.bertsir.com/source/pack/weixin/qrcode.php?link=http://apk.bertsir.com/app.php/2)
 
-#### [传送门](https://www.pgyer.com/CyKm "传送门")
+#### [传送门](http://apk.bertsir.com/app.php/2 "传送门")
 
 ### 打赏扫这里👇一分也是❤️（可以在备注中填写自己的github链接）
 

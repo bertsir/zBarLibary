@@ -79,7 +79,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version:1.4.1  buildDate:2019年11月05日 ");
+        Log.i("zBarLibary", "version: "+BuildConfig.VERSION_NAME);
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
         initParm();
         setContentView(R.layout.activity_qr);
