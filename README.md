@@ -334,9 +334,8 @@ compile 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
 
 
 ### DEMO
-![](http://apk.bertsir.com/source/pack/weixin/qrcode.php?link=http://apk.bertsir.com/app.php/2)
 
-#### [传送门](http://apk.bertsir.com/app.php/2 "传送门")
+#### [DEMO下载](https://github.com/bertsir/zBarLibary/releases/download/1.4.2/app-debug.apk "DEMO下载")
 
 ### 打赏扫这里👇一分也是❤️（可以在备注中填写自己的github链接）
 
